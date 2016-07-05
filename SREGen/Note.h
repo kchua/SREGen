@@ -9,6 +9,11 @@ public:
 	Note(int scaleNum, int octave, int accidental = 0);
 	Note operator++(int);
 	Note operator--(int);
+
+	int getScaleNum();
+	int getOctave();
+	int getAccidental();
+
 private:
 	int scaleNum, octave, accidental;
 };

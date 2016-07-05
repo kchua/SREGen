@@ -26,7 +26,7 @@ Scale Scale::generateMajorScale(string scale)
 	return temp;
 }
 
-// Constructs a harmonic minor scale.
+// Constructs a natural minor scale.
 Scale Scale::generateMinorScale(string scale)
 {
 	auto isFlatKeySig = [](string scale)->bool
@@ -63,16 +63,6 @@ Scale Scale::generateMinorScale(string scale)
 		newKeys[i + 2] = temp.keys[i];
 	}
 
-	// Modify for harmonic minor
-	if (newKeys[7].length == 3)
-	{
-		newKeys[7] = newKeys[7].substr(0, 1);
-	}
-	else
-	{
-		newKeys[7] = newKeys[7].append("is");
-	}
-
 	temp.keys = newKeys;
 	return temp;
 }
@@ -107,6 +97,6 @@ const vector<string> Scale::keyboardFlat =
 const vector<int> Scale::majorPattern =
 	vector<int>{ 2, 2, 1, 2, 2, 2 };
 
-// Harmonic minor scale pattern
+// Natural minor scale pattern
 const vector<int> Scale::minorPattern =
-	vector<int>{ 2, 1, 2, 2, 1, 3 };
+	vector<int>{ 2, 1, 2, 2, 1, 2 };
