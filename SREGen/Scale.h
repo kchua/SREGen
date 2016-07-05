@@ -10,18 +10,23 @@ using namespace std;
 class Scale
 {
 public:
-	static Scale generateScale(string scale, bool isMinor);
+	static Scale generateMajorScale(string scale);
+	static Scale generateMinorScale(string scale);
 	string& operator[](Note note);
 private:
 	static const vector<string> keyboardSharp;
 	static const vector<string> keyboardFlat;
+
+	static const vector<int> majorPattern;
+	static const vector<int> minorPattern;
+
 	vector<string> keys;
+
+	Scale();
+	static int keyIndex(string scale, const vector<string>& keyboard);
 };
 
-const vector<string> Scale::keyboardSharp = 
-	vector<string>{ "c", "cis", "d", "dis", "e", "f", "fis", "g", "gis", "a", "ais", "b" };
 
-const vector<string> Scale::keyboardFlat =
-	vector<string>{ "c", "des", "d", "ees", "e", "f", "ges", "g", "aes", "a", "bes", "b" };
+
 
 #endif

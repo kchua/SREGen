@@ -1,11 +1,10 @@
 #include "Note.h"
 
+/* Note class member initialization*/
 Note::Note(int scaleNum, int octave, int accidental)
-	: scaleNum(scaleNum), octave(octave), accidental(accidental)
-{
+	: scaleNum(scaleNum), octave(octave), accidental(accidental) {}
 
-}
-
+/* Moves the note up the scale. */
 Note Note::operator++(int)
 {
 	if (scaleNum < 6)
@@ -19,6 +18,7 @@ Note Note::operator++(int)
 	}
 }
 
+/* Moves the note down the scale. */
 Note Note::operator--(int)
 {
 	if (scaleNum > 0)

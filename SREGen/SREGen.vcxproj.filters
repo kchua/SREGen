@@ -32,5 +32,8 @@
     <ClCompile Include="Note.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+    <ClCompile Include="Scale.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
