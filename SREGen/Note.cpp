@@ -1,7 +1,7 @@
 #include "Note.h"
 
 /* Note class member initialization*/
-Note::Note(int scaleNum, int octave, int duration, int accidental = 0)
+Note::Note(int scaleNum, int octave, int duration, int accidental)
 	: scaleNum(scaleNum), octave(octave), accidental(accidental), duration(duration) {}
 
 /* Moves the note up the scale. */
@@ -16,6 +16,7 @@ Note Note::operator++(int)
 		scaleNum = 0;
 		octave++;
 	}
+	return *this;
 }
 
 /* Moves the note down the scale. */
@@ -30,6 +31,7 @@ Note Note::operator--(int)
 		scaleNum = 6;
 		octave--;
 	}
+	return *this;
 }
 
 int Note::getScaleNum()

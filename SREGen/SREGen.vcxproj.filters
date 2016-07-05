@@ -19,14 +19,12 @@
     <Filter Include="Source Files\General">
       <UniqueIdentifier>{87841c37-f551-4f1d-adce-e7258ddeb552}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Note.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
-    <ClInclude Include="Scale.h">
-      <Filter>Header Files\General</Filter>
-    </ClInclude>
+    <Filter Include="Header Files\Scale Generator">
+      <UniqueIdentifier>{0af43e88-1f6d-4c6c-8a61-95045a79c7d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scale Generator">
+      <UniqueIdentifier>{f7361f9f-0f34-48cd-a748-7da022f16f51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Note.cpp">
@@ -35,5 +33,16 @@
     <ClCompile Include="Scale.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Note.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Scale.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ScaleGenerator.h">
+      <Filter>Header Files\Scale Generator</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

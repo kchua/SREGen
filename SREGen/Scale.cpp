@@ -6,7 +6,7 @@ Scale Scale::generateMajorScale(string scale)
 	Scale temp = Scale();
 	auto isFlatKeySig = [](string scale)->bool
 	{
-		return (scale == "f") || (scale.length > 1 && scale.at(1) == 'e');
+		return (scale == "f") || (scale.length() > 1 && scale.at(1) == 'e');
 	};
 
 	vector<string> keyboard = (isFlatKeySig(scale)) ? keyboardFlat : keyboardSharp;
@@ -14,12 +14,12 @@ Scale Scale::generateMajorScale(string scale)
 	int kbIndex = keyIndex(scale, keyboard);
 	int curr = 0;
 
-	while (curr < majorPattern.size)
+	while (curr < majorPattern.size())
 	{
 		temp.keys[curr] = keyboard[kbIndex];
-		if (kbIndex + majorPattern[curr] > keyboard.size)
+		if (kbIndex + majorPattern[curr] > keyboard.size())
 		{
-			kbIndex = kbIndex + majorPattern[curr] - keyboard.size + 1;
+			kbIndex = kbIndex + majorPattern[curr] - keyboard.size() + 1;
 		}
 		curr++;
 	}
@@ -36,7 +36,7 @@ Scale Scale::generateMinorScale(string scale)
 			|| (scale == "c")
 			|| (scale == "g")
 			|| (scale == "d")
-			|| (scale.length > 1 && scale.at(1) == 'e');
+			|| (scale.length() > 1 && scale.at(1) == 'e');
 	};
 	vector<string> keyboard = (isFlatKeySig(scale)) ? keyboardFlat : keyboardSharp;
 	int kbIndex = keyIndex(scale, keyboard);
@@ -44,9 +44,9 @@ Scale Scale::generateMinorScale(string scale)
 
 	while (curr < 2)
 	{
-		if (kbIndex + minorPattern[curr] > keyboard.size)
+		if (kbIndex + minorPattern[curr] > keyboard.size())
 		{
-			kbIndex = kbIndex + minorPattern[curr] - keyboard.size + 1;
+			kbIndex = kbIndex + minorPattern[curr] - keyboard.size() + 1;
 		}
 		curr++;
 	}
@@ -75,9 +75,9 @@ string& Scale::operator[](Note note)
 	switch (note.getAccidental())
 	{
 	case -1:
-		if (letter.length > 1 && letter.at(1) == 'i')
+		if (letter.length() > 1 && letter.at(1) == 'i')
 		{
-			letter = letter.substr(0, letter.length - 2);
+			letter = letter.substr(0, letter.length() - 2);
 		}
 		else
 		{
@@ -86,9 +86,9 @@ string& Scale::operator[](Note note)
 		break;
 
 	case 1:
-		if (letter.length > 1 && letter.at(1) == 'e')
+		if (letter.length() > 1 && letter.at(1) == 'e')
 		{
-			letter = letter.substr(0, letter.length - 2);
+			letter = letter.substr(0, letter.length() - 2);
 		}
 		else
 		{
@@ -97,14 +97,13 @@ string& Scale::operator[](Note note)
 		break;
 	}
 
-	int rootIndex = keyIndex(keys[0]);
 	int offset = (keys[0] >= "fis" || keys[0] <= "bes") ? -1 : 0;
 
 	int octaveChange = 0;
 	if ((keys[0] < "c" && letter > "c") || (letter >= "c" && letter < keys[0])) {
 		octaveChange = 1;
 	}
-	int octave = note.getOctave + offset + octaveChange;
+	int octave = note.getOctave() + offset + octaveChange;
 
 	while (octave != 3)
 	{
