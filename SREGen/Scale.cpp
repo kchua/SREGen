@@ -69,7 +69,53 @@ Scale Scale::generateMinorScale(string scale)
 
 string& Scale::operator[](Note note)
 {
+	string letter = keys[note.getScaleNum()];
 
+	switch (note.getAccidental())
+	{
+	case -1:
+		if (letter.length > 1 && letter.at(1) == 'i')
+		{
+			letter = letter.substr(0, letter.length - 2);
+		}
+		else
+		{
+			letter.append("es");
+		}
+		break;
+
+	case 1:
+		if (letter.length > 1 && letter.at(1) == 'e')
+		{
+			letter = letter.substr(0, letter.length - 2);
+		}
+		else
+		{
+			letter.append("is");
+		}
+		break;
+	}
+
+	int offset = (letter >= "fis" || letter <= "bes") ? -1 : 0;
+	int octave = note.getOctave + offset;
+
+	while (octave != 3)
+	{
+		if (octave > 3)
+		{
+			octave--;
+			letter.append("'");
+		}
+		else
+		{
+			octave++;
+			letter.append(",");
+		}
+	}
+
+	letter.append(to_string(note.getDuration()));
+
+	return letter;
 }
 
 Scale::Scale() : keys(7) {};
