@@ -10,6 +10,7 @@ Scale Scale::generateMajorScale(string scale)
 	};
 
 	vector<string> keyboard = (isFlatKeySig(scale)) ? keyboardFlat : keyboardSharp;
+
 	int kbIndex = keyIndex(scale, keyboard);
 	int curr = 0;
 
@@ -96,8 +97,14 @@ string& Scale::operator[](Note note)
 		break;
 	}
 
-	int offset = (letter >= "fis" || letter <= "bes") ? -1 : 0;
-	int octave = note.getOctave + offset;
+	int rootIndex = keyIndex(keys[0]);
+	int offset = (keys[0] >= "fis" || keys[0] <= "bes") ? -1 : 0;
+
+	int octaveChange = 0;
+	if ((keys[0] < "c" && letter > "c") || (letter >= "c" && letter < keys[0])) {
+		octaveChange = 1;
+	}
+	int octave = note.getOctave + offset + octaveChange;
 
 	while (octave != 3)
 	{
