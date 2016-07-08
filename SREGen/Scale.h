@@ -24,6 +24,7 @@ private:
 
 	Scale(string scale);
 	static int keyIndex(string scale, const vector<string>& keyboard);
+	static string scaleNote(Scale s, const vector<string>& keyboard, int curr, int kbIndex);
 };
 
 
