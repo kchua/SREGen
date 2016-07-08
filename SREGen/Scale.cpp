@@ -16,7 +16,20 @@ Scale Scale::generateMajorScale(string scale)
 
 	while (curr < majorPattern.size())
 	{
-		temp.keys[curr] = keyboard[kbIndex];
+		if (temp.keys[curr].at(0) == keyboard[kbIndex].at(0))
+		{
+			temp.keys[curr] = keyboard[kbIndex];
+		}
+		else if ((temp.keys[curr].at(0) < keyboard[kbIndex].at(0))
+			|| (temp.keys[curr].at(0) == 'g' && keyboard[kbIndex].at(0) == 'a'))
+		{
+			temp.keys[curr].append("is");
+		}
+		else
+		{
+			temp.keys[curr].append("es");
+		}
+
 		if (kbIndex + majorPattern[curr] >= keyboard.size())
 		{
 			kbIndex = kbIndex + majorPattern[curr] - keyboard.size();
@@ -27,7 +40,19 @@ Scale Scale::generateMajorScale(string scale)
 		}
 		curr++;
 	}
-	temp.keys[curr] = keyboard[kbIndex];
+	if (temp.keys[curr].at(0) == keyboard[kbIndex].at(0))
+	{
+		temp.keys[curr] = keyboard[kbIndex];
+	}
+	else if ((temp.keys[curr].at(0) < keyboard[kbIndex].at(0))
+		|| (temp.keys[curr].at(0) == 'g' && keyboard[kbIndex].at(0) == 'a'))
+	{
+		temp.keys[curr].append("is");
+	}
+	else
+	{
+		temp.keys[curr].append("es");
+	}
 
 	return temp;
 }
@@ -51,7 +76,7 @@ Scale Scale::generateMinorScale(string scale)
 	{
 		if (kbIndex + minorPattern[curr] >= keyboard.size())
 		{
-			kbIndex = kbIndex + minorPattern[curr] - keyboard.size() + 1;
+			kbIndex = kbIndex + minorPattern[curr] - keyboard.size();
 		}
 		else
 		{
