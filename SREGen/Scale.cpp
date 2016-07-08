@@ -44,7 +44,7 @@ string Scale::scaleNote(Scale s, const vector<string>& keyboard, int curr, int k
 		if (nameIndex >= kbIndex) {
 			for (int i = 0; i < nameIndex - kbIndex; i++) {
 				s.keys[curr].append("es");
-			};
+			}
 		} else {
 			for (int i = 0; i < keyboard.size() - (kbIndex + 1) + (nameIndex + 1); i++) {
 				s.keys[curr].append("es");
