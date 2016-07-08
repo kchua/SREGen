@@ -1,11 +1,9 @@
 #include "Scale.h"
 
 // Constructs a major scale.
-Scale Scale::generateMajorScale(string scale)
-{
-	Scale temp = Scale();
-	auto isFlatKeySig = [](string scale)->bool
-	{
+Scale Scale::generateMajorScale(string scale) {
+	Scale temp = Scale(scale);
+	auto isFlatKeySig = [](string scale)->bool {
 		return (scale == "f") || (scale.length() > 1 && scale.at(1) == 'e');
 	};
 
@@ -14,22 +12,46 @@ Scale Scale::generateMajorScale(string scale)
 	int kbIndex = keyIndex(scale, keyboard);
 	int curr = 0;
 
-	while (curr < majorPattern.size())
-	{
-		temp.keys[curr] = keyboard[kbIndex];
-		if (kbIndex + majorPattern[curr] >= keyboard.size())
-		{
+	while (curr < majorPattern.size()) {
+		temp.keys[curr] = scaleNote(temp, keyboard, curr, kbIndex);
+
+		if (kbIndex + majorPattern[curr] >= keyboard.size()) {
 			kbIndex = kbIndex + majorPattern[curr] - keyboard.size();
-		}
-		else 
-		{
+		} else {
 			kbIndex = kbIndex + majorPattern[curr];
 		}
 		curr++;
 	}
-	temp.keys[curr] = keyboard[kbIndex];
+
+	temp.keys[curr] = scaleNote(temp, keyboard, curr, kbIndex);
 
 	return temp;
+}
+
+string Scale::scaleNote(Scale s, const vector<string>& keyboard, int curr, int kbIndex) {
+	int nameIndex = keyIndex(s.keys[curr], keyboard);
+	if (keyboard == keyboardSharp) {
+		if (nameIndex <= kbIndex) {
+			for (int i = 0; i < kbIndex - nameIndex; i++) {
+				s.keys[curr].append("is");
+			}
+		} else {
+			for (int i = 0; i < keyboard.size() - (nameIndex + 1) + (kbIndex + 1); i++) {
+				s.keys[curr].append("is");
+			}
+		}
+	} else {
+		if (nameIndex >= kbIndex) {
+			for (int i = 0; i < nameIndex - kbIndex; i++) {
+				s.keys[curr].append("es");
+			}
+		} else {
+			for (int i = 0; i < keyboard.size() - (kbIndex + 1) + (nameIndex + 1); i++) {
+				s.keys[curr].append("es");
+			}
+		}
+	}
+	return s.keys[curr];
 }
 
 // Constructs a natural minor scale.
@@ -51,7 +73,7 @@ Scale Scale::generateMinorScale(string scale)
 	{
 		if (kbIndex + minorPattern[curr] >= keyboard.size())
 		{
-			kbIndex = kbIndex + minorPattern[curr] - keyboard.size() + 1;
+			kbIndex = kbIndex + minorPattern[curr] - keyboard.size();
 		}
 		else
 		{
@@ -135,15 +157,45 @@ string Scale::operator[](Note note)
 	return letter;
 }
 
-Scale::Scale() : keys(7) {};
+Scale::Scale(string scale) 
+	: keys(7) 
+{
+	char curr = scale.at(0);
+	keys[0] = string(1, curr);
+	for (int i = 1; i < 7; i++) 
+	{
+		curr++;
+		if (curr == 'h') 
+		{
+			curr = 'a';
+		}
+		keys[i] = string(1, curr);
+	}
+}
 
 /* Finds where a key is on the keyboard. */
 int Scale::keyIndex(string scale, const vector<string>& keyboard)
 {
+	string base = string(1, scale.at(0));
 	int i = 0;
-	while (keyboard[i] != scale)
+	while (keyboard[i] != base)
 	{
 		i++;
+	}
+	while (scale.length() > 1) 
+	{
+		if (scale.at(1) == 'i') 
+		{
+			i = (i + 1) % keyboard.size();
+		}
+		else 
+		{
+			i--;
+			if (i < 0) {
+				i = keyboard.size() - 1;
+			}
+		}
+		scale = scale.substr(0, scale.size() - 2);
 	}
 	return i;
 }
