@@ -77,7 +77,7 @@ Scale Scale::generateMinorScale(string scale)
 		}
 		else
 		{
-			kbIndex = kbIndex + majorPattern[curr];
+			kbIndex = kbIndex + minorPattern[curr];
 		}
 		curr++;
 	}
