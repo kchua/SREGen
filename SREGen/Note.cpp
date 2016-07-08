@@ -7,6 +7,7 @@ Note::Note(int scaleNum, int octave, int duration, int accidental)
 /* Moves the note up the scale. */
 Note Note::operator++(int)
 {
+	Note temp(*this);
 	if (scaleNum < 6)
 	{
 		scaleNum++;
@@ -16,12 +17,13 @@ Note Note::operator++(int)
 		scaleNum = 0;
 		octave++;
 	}
-	return *this;
+	return temp;
 }
 
 /* Moves the note down the scale. */
 Note Note::operator--(int)
 {
+	Note temp(*this);
 	if (scaleNum > 0)
 	{
 		scaleNum--;
@@ -31,7 +33,7 @@ Note Note::operator--(int)
 		scaleNum = 6;
 		octave--;
 	}
-	return *this;
+	return temp;
 }
 
 int Note::getScaleNum()
@@ -47,4 +49,9 @@ int Note::getOctave()
 int Note::getAccidental()
 {
 	return accidental;
+}
+
+int Note::getDuration()
+{
+	return duration;
 }

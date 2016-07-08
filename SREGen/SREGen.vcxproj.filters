@@ -33,6 +33,9 @@
     <ClCompile Include="Scale.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+    <ClCompile Include="ScaleGenerator.cpp">
+      <Filter>Source Files\Scale Generator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">

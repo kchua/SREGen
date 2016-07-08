@@ -12,7 +12,7 @@ class Scale
 public:
 	static Scale generateMajorScale(string scale);
 	static Scale generateMinorScale(string scale);
-	string& operator[](Note note);
+	string operator[](Note note);
 private:
 	static const vector<string> keyboardSharp;
 	static const vector<string> keyboardFlat;

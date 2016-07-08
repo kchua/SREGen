@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="Note.cpp" />
     <ClCompile Include="Scale.cpp" />
+    <ClCompile Include="ScaleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h" />

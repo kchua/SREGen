@@ -17,12 +17,17 @@ Scale Scale::generateMajorScale(string scale)
 	while (curr < majorPattern.size())
 	{
 		temp.keys[curr] = keyboard[kbIndex];
-		if (kbIndex + majorPattern[curr] > keyboard.size())
+		if (kbIndex + majorPattern[curr] >= keyboard.size())
 		{
-			kbIndex = kbIndex + majorPattern[curr] - keyboard.size() + 1;
+			kbIndex = kbIndex + majorPattern[curr] - keyboard.size();
+		}
+		else 
+		{
+			kbIndex = kbIndex + majorPattern[curr];
 		}
 		curr++;
 	}
+	temp.keys[curr] = keyboard[kbIndex];
 
 	return temp;
 }
@@ -44,9 +49,13 @@ Scale Scale::generateMinorScale(string scale)
 
 	while (curr < 2)
 	{
-		if (kbIndex + minorPattern[curr] > keyboard.size())
+		if (kbIndex + minorPattern[curr] >= keyboard.size())
 		{
 			kbIndex = kbIndex + minorPattern[curr] - keyboard.size() + 1;
+		}
+		else
+		{
+			kbIndex = kbIndex + majorPattern[curr];
 		}
 		curr++;
 	}
@@ -68,7 +77,7 @@ Scale Scale::generateMinorScale(string scale)
 	return temp;
 }
 
-string& Scale::operator[](Note note)
+string Scale::operator[](Note note)
 {
 	string letter = keys[note.getScaleNum()];
 
