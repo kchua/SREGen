@@ -177,10 +177,26 @@ Scale::Scale(string scale)
 /* Finds where a key is on the keyboard. */
 int Scale::keyIndex(string scale, const vector<string>& keyboard)
 {
+	string base = string(1, scale.at(0));
 	int i = 0;
-	while (keyboard[i] != scale)
+	while (keyboard[i] != base)
 	{
 		i++;
+	}
+	while (scale.length() > 1) {
+		if (scale.at(1) == 'i') {
+			i++;
+			if (i > keyboard.size()) {
+				i = 0;
+			}
+		}
+		else {
+			i--;
+			if (i < 0) {
+				i = keyboard.size() - 1;
+			}
+		}
+		scale = scale.substr(0, scale.size() - 2);
 	}
 	return i;
 }
