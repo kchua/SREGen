@@ -22,7 +22,7 @@ private:
 
 	vector<string> keys;
 
-	Scale();
+	Scale(string scale);
 	static int keyIndex(string scale, const vector<string>& keyboard);
 };
 

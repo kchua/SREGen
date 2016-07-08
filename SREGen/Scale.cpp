@@ -3,7 +3,7 @@
 // Constructs a major scale.
 Scale Scale::generateMajorScale(string scale)
 {
-	Scale temp = Scale();
+	Scale temp = Scale(scale);
 	auto isFlatKeySig = [](string scale)->bool
 	{
 		return (scale == "f") || (scale.length() > 1 && scale.at(1) == 'e');
@@ -133,7 +133,21 @@ string Scale::operator[](Note note)
 	return letter;
 }
 
-Scale::Scale() : keys(7) {};
+Scale::Scale(string scale) 
+	: keys(7) 
+{
+	char curr = scale.at(0);
+	keys[0] = string(1, curr);
+	for (int i = 1; i < 7; i++) 
+	{
+		curr++;
+		if (curr == 'h') 
+		{
+			curr = 'a';
+		}
+		keys[i] = string(1, curr);
+	}
+}
 
 /* Finds where a key is on the keyboard. */
 int Scale::keyIndex(string scale, const vector<string>& keyboard)
