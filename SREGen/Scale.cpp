@@ -109,7 +109,9 @@ string Scale::operator[](Note note)
 	int offset = (keys[0] >= "fis" || keys[0] <= "bes") ? -1 : 0;
 
 	int octaveChange = 0;
-	if ((keys[0] < "c" && letter > "c") || (letter >= "c" && letter < keys[0])) {
+	if ((keys[0] < "c" && letter >= "c") 
+			|| (letter >= "c" && letter < keys[0])
+			|| (letter.at(0) == 'a' && keys[0].at(0) == 'b')) {
 		octaveChange = 1;
 	}
 	int octave = note.getOctave() + offset + octaveChange;
