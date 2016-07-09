@@ -33,10 +33,17 @@ void SG::generateScale(int argc, char* argv[]) {
 	Note root = Note(0, 4, 4);
 
 	scaleFile << s[root++] << " ";
-	for (int i = 0; i < 7; i++) {	
+	for (int i = 0; i < 6; i++) {	
+		if (i == 4 && tonality.at(3) == 'n' && tonality.at(0) == 'm') {
+			root = Note(5, 4, 4, 1);
+		}
+		if (i == 5 && tonality.at(3) == 'n' && tonality.at(0) == 'h') {
+			root = Note(6, 4, 4, 1);
+		}
 		scaleFile << s[root++] << " ";
-
 	}
+	root = Note(0, 5, 4);
+	scaleFile << s[root];
 	scaleFile << "\n";
 	scaleFile << "}";
 }
