@@ -3,8 +3,7 @@
 
 /* A note forms the basic building block of the musical 
    chromosome. */
-class Note
-{
+class Note {
 public:
 	Note(int scaleNum, int octave, int duration, int accidental = 0);
 	Note operator++(int);

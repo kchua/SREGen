@@ -9,8 +9,7 @@
 
 using namespace std;
 
-class ScaleGenerator
-{
+class ScaleGenerator {
 public:
 	static void generateScale(int argc, char* argv[]);
 };

@@ -7,13 +7,13 @@
 
 using namespace std;
 
-class Scale
-{
+class Scale {
 public:
-	static Scale generateMajorScale(string scale);
-	static Scale generateMinorScale(string scale);
+	static Scale generateScale(string scale, bool isMinor);
 	string operator[](Note note);
 private:
+	static Scale generateScale(string scale, const vector<int>& pattern, bool isFlat);
+
 	static const vector<string> keyboardSharp;
 	static const vector<string> keyboardFlat;
 
@@ -24,7 +24,7 @@ private:
 
 	Scale(string scale);
 	static int keyIndex(string scale, const vector<string>& keyboard);
-	static string scaleNote(Scale s, const vector<string>& keyboard, int curr, int kbIndex);
+	static void correctScaleNote(Scale& s, const vector<string>& keyboard, int curr, int kbIndex);
 };
 
 
