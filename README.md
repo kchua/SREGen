@@ -1,9 +1,10 @@
 # Sight Reading Exercise Generator
-SREGen is a project I decided to undertake when I started to play the
-piano more often again, and realized that I am a horrible sight reader.
-Ultimately, I hope that SREGen would be able to successfully generate
-sight reading exercises whose difficulty can be controlled, and at the same
-time, sound musical by following the rules set by music theory.
+SREGen is a project I decided to undertake when I started to play
+the piano more often again, and realized that I am a horrible sight
+reader. Ultimately, I hope that SREGen would be able to successfully
+generate sight reading exercises whose difficulty can be controlled,
+and at the same time, sound musical by following the rules set by
+music theory.
 
 ## Usage (Command Line Arguments)
 
@@ -33,8 +34,9 @@ Example 2 (generates a B&#9837; major scale):
   harmonic minor, or a melodic minor scale).
 
 ## Progress
-Will add a few features to the note class before moving on to defining
-chords and standard progressions.
+In the process of defining a chord class. Will take a detour to
+create tiny program that would take in a scale and degree number,
+and output the corresponding chord and all its inversions.
 
 ## Tentative Project Plan
   1. Internal representation of notes and scales

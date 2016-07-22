@@ -14,9 +14,10 @@ public:
 
 	void octaveUp();
 	void octaveDown();
+	void setOctave(int octave);
+	int getOctave();
 
 	int getScaleNum();
-	int getOctave();
 	int getAccidental();
 	int getDuration();
 

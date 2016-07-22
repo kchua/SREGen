@@ -46,6 +46,14 @@ void Note::octaveDown() {
 	octave--;
 }
 
+void Note::setOctave(int octave) {
+	this->octave = octave;
+}
+
+int Note::getOctave() {
+	return octave;
+}
+
 int Note::getScaleNum() {
 	return scaleNum;
 }
