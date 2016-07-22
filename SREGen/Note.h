@@ -6,8 +6,14 @@
 class Note {
 public:
 	Note(int scaleNum, int octave, int duration, int accidental = 0);
+
+	Note& operator++();
+	Note& operator--();
 	Note operator++(int);
 	Note operator--(int);
+
+	void octaveUp();
+	void octaveDown();
 
 	int getScaleNum();
 	int getOctave();

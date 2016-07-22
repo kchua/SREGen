@@ -81,7 +81,7 @@ string Scale::operator[](Note note) {
 			break;
 	}
 
-	int offset = (keys[0] >= "fis" || keys[0] <= "bes") ? -1 : 0;
+	int offset = (keys[0].at(0) <= 'b') ? -1 : 0;
 
 	int octaveChange = 0;
 	if ((keys[0] < "c" && letter >= "c") 
