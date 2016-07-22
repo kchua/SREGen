@@ -7,6 +7,10 @@ time, sound musical by following the rules set by music theory.
 
 ## Usage (Command Line Arguments)
 
+*Note: This program generates .ly files; compilation into .pdf files
+requires an existing installation of Lilypond (installer can be
+downloaded [here](http://lilypond.org)).*
+
 ### Scale Generator
 Example 1 (generates an A&#9839; natural minor scale):
 
@@ -42,4 +46,4 @@ chords and standard progressions.
   7. Two-part music
   8. Four-part music generation
   9. Ornamentation
-  10. Construction of complex music from four-part music
+  10. Construction of complex music from four-part music (stretch)
