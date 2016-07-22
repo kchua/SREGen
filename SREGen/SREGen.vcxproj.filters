@@ -36,6 +36,9 @@
     <ClCompile Include="ScaleGenerator.cpp">
       <Filter>Source Files\Scale Generator</Filter>
     </ClCompile>
+    <ClCompile Include="Chord.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">
@@ -46,6 +49,9 @@
     </ClInclude>
     <ClInclude Include="ScaleGenerator.h">
       <Filter>Header Files\Scale Generator</Filter>
+    </ClInclude>
+    <ClInclude Include="Chord.h">
+      <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
