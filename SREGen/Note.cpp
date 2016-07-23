@@ -58,10 +58,6 @@ int Note::getScaleNum() {
 	return scaleNum;
 }
 
-int Note::getOctave() {
-	return octave;
-}
-
 int Note::getAccidental() {
 	return accidental;
 }

@@ -1,4 +1,5 @@
 #include "Chord.h"
+#include <iostream>
 
 //////////////////
 // Constructors //
@@ -22,6 +23,7 @@ void Chord::invert() {
 	temp.octaveUp();
 	chord.pop_front();
 	chord.push_back(temp);
+	inversion++;
 	if (inversion == ((isSeventh) ? 4 : 3)) {
 		deque<Note>::iterator iter = chord.begin();
 		while (iter != chord.end()) {
@@ -49,7 +51,8 @@ Note Chord::getBottom() {
 
 /* Returns the name of the chord (Roman Numeral), with the inversion appended. */
 string Chord::getName() {
-	return name.append(((isSeventh) ? seventhInversions : triadInversions)[inversion]);
+	string temp = name;
+	return temp.append(((isSeventh) ? seventhInversions : triadInversions)[inversion]);
 }
 
 string Chord::outputChord(Scale scale, int octave) {
@@ -79,3 +82,24 @@ void Chord::setOctave(int octave) {
 
 const vector<string> Chord::triadInversions{ "", "6", "6/4" };
 const vector<string> Chord::seventhInversions{ "7", "6/5", "4/3", "4/2" };
+
+/*  // Basic Tests
+int main() {
+	Note root(0, 4, 4, 0);
+	Note third(2, 4, 4, 0);
+	Note fifth(4, 4, 4, 0);
+	Scale C = Scale::generateScale("c", false);
+	Chord CMaj("I", root, third, fifth);
+	cout << "Root position: " << CMaj.getName() << endl;
+	cout << CMaj.outputChord(C, 4) << endl << endl;
+	CMaj.invert();
+	cout << "First inversion: " << CMaj.getName() << endl;
+	cout << CMaj.outputChord(C, 4) << endl << endl;
+	CMaj.invert();
+	cout << "Second inversion: " << CMaj.getName() << endl;
+	cout << CMaj.outputChord(C, 4) << endl << endl;
+	CMaj.invert();
+	cout << "Root position: " << CMaj.getName() << endl;
+	cout << CMaj.outputChord(C, 4) << endl << endl;
+}
+*/
