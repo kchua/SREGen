@@ -54,7 +54,18 @@ string Chord::getName() {
 
 string Chord::outputChord(Scale scale, int octave) {
 	setOctave(octave);
-	// TODO: Extract notes and output in Lilypond format.
+	int durLength = to_string(getBottom().getDuration()).size();
+	string output = "<";
+	deque<Note>::iterator iter = chord.begin();
+	while (iter != chord.end()) {
+		string note = scale[*(iter++)];
+		output += note.substr(0, note.size() - durLength);
+		output += " ";
+	}
+	output = output.substr(0, output.size() - 1);
+	output += ">";
+	output += to_string(getBottom().getDuration());
+	return output;
 }
 
 void Chord::setOctave(int octave) {
