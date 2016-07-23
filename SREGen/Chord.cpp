@@ -59,13 +59,12 @@ string Chord::outputChord(Scale scale, int octave) {
 
 void Chord::setOctave(int octave) {
 	deque<Note>::iterator iter = chord.begin();
-	int octaveUp = ((isSeventh) ? 3 : 2) - inversion;
-	int j = 0;
+	int base = iter->getOctave();
 	while (iter != chord.end()) {
-		(iter++)->setOctave(octave + ((j > octaveUp) ? 1 : 0));
-		j++;
+		(iter)->setOctave(iter->getOctave() - base + octave);
+		iter++;
 	}
 }
 
 const vector<string> Chord::triadInversions{ "", "6", "6/4" };
-const vector<string> Chord::seventhInversions{ "", "6/5", "4/3", "4/2" };
+const vector<string> Chord::seventhInversions{ "7", "6/5", "4/3", "4/2" };
