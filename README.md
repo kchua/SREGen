@@ -34,9 +34,8 @@ Example 2 (generates a B&#9837; major scale):
   harmonic minor, or a melodic minor scale).
 
 ## Progress
-In the process of defining a chord class. Will take a detour to
-create tiny program that would take in a scale and degree number,
-and output the corresponding chord and all its inversions.
+Currently designing a data structure that would encode chord
+progressions and allow efficient access.
 
 ## Tentative Project Plan
   1. Internal representation of notes and scales
