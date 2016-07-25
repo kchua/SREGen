@@ -27,7 +27,4 @@ private:
 	static void correctScaleNote(Scale& s, const vector<string>& keyboard, int curr, int kbIndex);
 };
 
-
-
-
 #endif

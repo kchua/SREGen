@@ -10,14 +10,14 @@ public:
 	bool progressionBetween(Chord first, Chord second);
 	Chord getRandomChord();
 protected:
-	Progression();
+	Progression(bool isMinor);
 	void addChord(Chord chord);
 	void makeProgressionBetween(Chord first, Chord second);
-	void setFinalChord(Chord chord);
 private:
 	struct chordHashFunction {
 		int operator()(Chord chord);
 	};
+	Chord tonicChord;
 	unordered_map<Chord, vector<Chord>, chordHashFunction> progressionGraph;
 	vector<Chord> chords;
 };
