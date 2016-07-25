@@ -39,6 +39,9 @@
     <ClCompile Include="Chord.cpp">
       <Filter>Source Files\General</Filter>
     </ClCompile>
+    <ClCompile Include="Progression.cpp">
+      <Filter>Source Files\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files\Scale Generator</Filter>
     </ClInclude>
     <ClInclude Include="Chord.h">
+      <Filter>Header Files\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Progression.h">
       <Filter>Header Files\General</Filter>
     </ClInclude>
   </ItemGroup>

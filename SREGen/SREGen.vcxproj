@@ -112,12 +112,14 @@
   <ItemGroup>
     <ClCompile Include="Chord.cpp" />
     <ClCompile Include="Note.cpp" />
+    <ClCompile Include="Progression.cpp" />
     <ClCompile Include="Scale.cpp" />
     <ClCompile Include="ScaleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chord.h" />
     <ClInclude Include="Note.h" />
+    <ClInclude Include="Progression.h" />
     <ClInclude Include="Scale.h" />
     <ClInclude Include="ScaleGenerator.h" />
   </ItemGroup>

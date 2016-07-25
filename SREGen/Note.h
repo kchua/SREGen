@@ -11,6 +11,7 @@ public:
 	Note& operator--();
 	Note operator++(int);
 	Note operator--(int);
+	bool operator==(Note other);
 
 	void octaveUp();
 	void octaveDown();
