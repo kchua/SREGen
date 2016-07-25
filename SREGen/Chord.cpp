@@ -13,6 +13,17 @@ Chord::Chord(string name, Note root, Note third, Note fifth)
 Chord::Chord(string name, Note root, Note third, Note fifth, Note seventh)
 	: name(name), isSeventh(true), chord{ root, third, fifth, seventh }, inversion(0) {}
 
+
+///////////////
+// Operators //
+///////////////
+
+/* Checks if two chords are the same, regardless of inversion or octave. */
+bool Chord::operator==(Chord other) {
+	return other.name == this->name;
+}
+
+
 /////////////////////
 // Other Functions //
 /////////////////////
@@ -55,6 +66,7 @@ string Chord::getName() {
 	return temp.append(((isSeventh) ? seventhInversions : triadInversions)[inversion]);
 }
 
+/* Outputs a chord as string that can be used in a .ly file. */
 string Chord::outputChord(Scale scale, int octave) {
 	setOctave(octave);
 	int durLength = to_string(getBottom().getDuration()).size();
@@ -71,6 +83,7 @@ string Chord::outputChord(Scale scale, int octave) {
 	return output;
 }
 
+/* Sets the octave of a chord. */
 void Chord::setOctave(int octave) {
 	deque<Note>::iterator iter = chord.begin();
 	int base = iter->getOctave();

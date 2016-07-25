@@ -14,6 +14,8 @@ public:
 	Chord(string name, Note root, Note third, Note fifth);
 	Chord(string name, Note root, Note third, Note fifth, Note seventh);
 
+	bool operator==(Chord other);
+
 	void invert();
 	bool contains(Note note);
 	Note getBottom();
