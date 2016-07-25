@@ -8,6 +8,10 @@
 Note::Note(int scaleNum, int octave, int duration, int accidental)
 	: scaleNum(scaleNum), octave(octave), accidental(accidental), duration(duration) {}
 
+/* Note constructor for when only the scaleNum (and possibly accidental) is relevant. */
+Note::Note(int scaleNum, int accidental) 
+	: Note(scaleNum, 4, 4, accidental) {}
+
 
 ///////////////
 // Operators //

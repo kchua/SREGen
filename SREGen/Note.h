@@ -6,6 +6,7 @@
 class Note {
 public:
 	Note(int scaleNum, int octave, int duration, int accidental = 0);
+	Note(int scaleNum, int accidental = 0);
 
 	Note& operator++();
 	Note& operator--();
