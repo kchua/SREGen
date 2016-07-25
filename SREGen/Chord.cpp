@@ -66,6 +66,11 @@ string Chord::getName() {
 	return temp.append(((isSeventh) ? seventhInversions : triadInversions)[inversion]);
 }
 
+/* Returns the name of the chord without appending the inversion of the chord. */
+string Chord::getNameWithoutInv() {
+	return name;
+}
+
 /* Outputs a chord as string that can be used in a .ly file. */
 string Chord::outputChord(Scale scale, int octave) {
 	setOctave(octave);

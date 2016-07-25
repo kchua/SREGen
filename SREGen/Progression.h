@@ -2,6 +2,7 @@
 #define PROGRESSION_H
 
 #include <unordered_map>
+#include <functional>
 #include <vector>
 #include "Chord.h"
 
@@ -15,7 +16,7 @@ protected:
 	void makeProgressionBetween(Chord first, Chord second);
 private:
 	struct chordHashFunction {
-		int operator()(Chord chord);
+		size_t operator()(Chord chord);
 	};
 	Chord tonicChord;
 	unordered_map<Chord, vector<Chord>, chordHashFunction> progressionGraph;

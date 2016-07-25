@@ -60,3 +60,7 @@ void Progression::makeProgressionBetween(Chord first, Chord second) {
 		progressionGraph.at(first).push_back(second);
 	}
 }
+
+size_t Progression::chordHashFunction::operator()(Chord chord) {
+	return std::hash<string>()(chord.getNameWithoutInv());
+}

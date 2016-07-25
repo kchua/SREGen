@@ -20,6 +20,7 @@ public:
 	bool contains(Note note);
 	Note getBottom();
 	string getName();
+	string getNameWithoutInv();
 	string outputChord(Scale scale, int octave);
 
 private:
