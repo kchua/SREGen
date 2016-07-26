@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Scale Generator">
       <UniqueIdentifier>{f7361f9f-0f34-48cd-a748-7da022f16f51}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\General\Progressions">
+      <UniqueIdentifier>{1d777f3c-4ca1-4418-acc9-b7aad5511b13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\General\Progressions">
+      <UniqueIdentifier>{8788916b-28d4-4cd8-92d0-338ad4a94bb0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Note.cpp">
@@ -40,7 +46,10 @@
       <Filter>Source Files\General</Filter>
     </ClCompile>
     <ClCompile Include="Progression.cpp">
-      <Filter>Source Files\General</Filter>
+      <Filter>Source Files\General\Progressions</Filter>
+    </ClCompile>
+    <ClCompile Include="MajorProgression.cpp">
+      <Filter>Source Files\General\Progressions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,7 +66,10 @@
       <Filter>Header Files\General</Filter>
     </ClInclude>
     <ClInclude Include="Progression.h">
-      <Filter>Header Files\General</Filter>
+      <Filter>Header Files\General\Progressions</Filter>
+    </ClInclude>
+    <ClInclude Include="MajorProgression.h">
+      <Filter>Header Files\General\Progressions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

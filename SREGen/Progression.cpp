@@ -61,6 +61,11 @@ void Progression::makeProgressionBetween(Chord first, Chord second) {
 	}
 }
 
+/* Returns a copy of the tonic chord. */
+Chord Progression::getTonic() {
+   return tonicChord;
+}
+
 size_t Progression::chordHashFunction::operator()(Chord chord) const {
 	return std::hash<string>()(chord.getNameWithoutInv());
 }

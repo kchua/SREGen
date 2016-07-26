@@ -14,6 +14,7 @@ protected:
 	Progression(bool isMinor);
 	void addChord(Chord chord);
 	void makeProgressionBetween(Chord first, Chord second);
+	Chord getTonic();
 private:
 	struct chordHashFunction {
 		size_t operator()(Chord chord) const;
