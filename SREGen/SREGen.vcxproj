@@ -112,6 +112,7 @@
   <ItemGroup>
     <ClCompile Include="Chord.cpp" />
     <ClCompile Include="MajorProgression.cpp" />
+    <ClCompile Include="MinorProgression.cpp" />
     <ClCompile Include="Note.cpp" />
     <ClCompile Include="Progression.cpp" />
     <ClCompile Include="Scale.cpp" />
@@ -120,6 +121,7 @@
   <ItemGroup>
     <ClInclude Include="Chord.h" />
     <ClInclude Include="MajorProgression.h" />
+    <ClInclude Include="MinorProgression.h" />
     <ClInclude Include="Note.h" />
     <ClInclude Include="Progression.h" />
     <ClInclude Include="Scale.h" />

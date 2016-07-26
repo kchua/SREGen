@@ -51,6 +51,9 @@
     <ClCompile Include="MajorProgression.cpp">
       <Filter>Source Files\General\Progressions</Filter>
     </ClCompile>
+    <ClCompile Include="MinorProgression.cpp">
+      <Filter>Source Files\General\Progressions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files\General\Progressions</Filter>
     </ClInclude>
     <ClInclude Include="MajorProgression.h">
+      <Filter>Header Files\General\Progressions</Filter>
+    </ClInclude>
+    <ClInclude Include="MinorProgression.h">
       <Filter>Header Files\General\Progressions</Filter>
     </ClInclude>
   </ItemGroup>
