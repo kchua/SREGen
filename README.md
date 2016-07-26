@@ -34,8 +34,8 @@ Example 2 (generates a B&#9837; major scale):
   harmonic minor, or a melodic minor scale).
 
 ## Progress
-Currently designing a data structure that would encode chord
-progressions and allow efficient access.
+About to encode typical chord progressions in both the major and
+minor tonalities by extending the `Progression` class.
 
 ## Tentative Project Plan
   1. Internal representation of notes and scales
