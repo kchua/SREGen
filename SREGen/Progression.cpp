@@ -61,6 +61,6 @@ void Progression::makeProgressionBetween(Chord first, Chord second) {
 	}
 }
 
-size_t Progression::chordHashFunction::operator()(Chord chord) {
+size_t Progression::chordHashFunction::operator()(Chord chord) const {
 	return std::hash<string>()(chord.getNameWithoutInv());
 }

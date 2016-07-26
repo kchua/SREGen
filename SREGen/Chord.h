@@ -14,14 +14,14 @@ public:
 	Chord(string name, Note root, Note third, Note fifth);
 	Chord(string name, Note root, Note third, Note fifth, Note seventh);
 
-	bool operator==(Chord other);
+	bool operator==(const Chord& other) const;
 
 	void invert();
-	bool contains(Note note);
+	bool contains(Note& note);
 	Note getBottom();
 	string getName();
 	string getNameWithoutInv();
-	string outputChord(Scale scale, int octave);
+	string outputChord(Scale& scale, int octave);
 
 private:
 	string name;

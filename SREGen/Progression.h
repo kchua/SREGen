@@ -16,7 +16,7 @@ protected:
 	void makeProgressionBetween(Chord first, Chord second);
 private:
 	struct chordHashFunction {
-		size_t operator()(Chord chord);
+		size_t operator()(Chord chord) const;
 	};
 	Chord tonicChord;
 	unordered_map<Chord, vector<Chord>, chordHashFunction> progressionGraph;

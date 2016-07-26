@@ -19,7 +19,7 @@ Chord::Chord(string name, Note root, Note third, Note fifth, Note seventh)
 ///////////////
 
 /* Checks if two chords are the same, regardless of inversion or octave. */
-bool Chord::operator==(Chord other) {
+bool Chord::operator==(const Chord& other) const {
 	return other.name == this->name;
 }
 
@@ -45,7 +45,7 @@ void Chord::invert() {
 }
 
 /* Checks if the chord contains the argument note. */
-bool Chord::contains(Note note) {
+bool Chord::contains(Note& note) {
 	deque<Note>::iterator iter = chord.begin();
 	while (iter != chord.end()) {
 		if ((iter++)->getScaleNum() == note.getScaleNum()) {
@@ -72,7 +72,7 @@ string Chord::getNameWithoutInv() {
 }
 
 /* Outputs a chord as string that can be used in a .ly file. */
-string Chord::outputChord(Scale scale, int octave) {
+string Chord::outputChord(Scale& scale, int octave) {
 	setOctave(octave);
 	int durLength = to_string(getBottom().getDuration()).size();
 	string output = "<";
