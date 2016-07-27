@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chord.h" />
+    <ClInclude Include="GA.h" />
     <ClInclude Include="MajorProgression.h" />
     <ClInclude Include="MinorProgression.h" />
     <ClInclude Include="Note.h" />

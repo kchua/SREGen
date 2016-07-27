@@ -13,69 +13,75 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\General">
-      <UniqueIdentifier>{6cea7e57-722f-4bb6-9323-7b7b56e86401}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\General">
-      <UniqueIdentifier>{87841c37-f551-4f1d-adce-e7258ddeb552}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Scale Generator">
       <UniqueIdentifier>{0af43e88-1f6d-4c6c-8a61-95045a79c7d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Scale Generator">
       <UniqueIdentifier>{f7361f9f-0f34-48cd-a748-7da022f16f51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\General\Progressions">
+    <Filter Include="Header Files\Music">
+      <UniqueIdentifier>{6cea7e57-722f-4bb6-9323-7b7b56e86401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Music\Progressions">
       <UniqueIdentifier>{1d777f3c-4ca1-4418-acc9-b7aad5511b13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\General\Progressions">
+    <Filter Include="Source Files\Music">
+      <UniqueIdentifier>{87841c37-f551-4f1d-adce-e7258ddeb552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Music\Progressions">
       <UniqueIdentifier>{8788916b-28d4-4cd8-92d0-338ad4a94bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Genetic Algorithms">
+      <UniqueIdentifier>{d94be039-9015-4290-bb4b-34c5deaf1995}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Note.cpp">
-      <Filter>Source Files\General</Filter>
+      <Filter>Source Files\Music</Filter>
     </ClCompile>
     <ClCompile Include="Scale.cpp">
-      <Filter>Source Files\General</Filter>
+      <Filter>Source Files\Music</Filter>
     </ClCompile>
     <ClCompile Include="ScaleGenerator.cpp">
       <Filter>Source Files\Scale Generator</Filter>
     </ClCompile>
     <ClCompile Include="Chord.cpp">
-      <Filter>Source Files\General</Filter>
+      <Filter>Source Files\Music</Filter>
     </ClCompile>
     <ClCompile Include="Progression.cpp">
-      <Filter>Source Files\General\Progressions</Filter>
+      <Filter>Source Files\Music\Progressions</Filter>
     </ClCompile>
     <ClCompile Include="MajorProgression.cpp">
-      <Filter>Source Files\General\Progressions</Filter>
+      <Filter>Source Files\Music\Progressions</Filter>
     </ClCompile>
     <ClCompile Include="MinorProgression.cpp">
-      <Filter>Source Files\General\Progressions</Filter>
+      <Filter>Source Files\Music\Progressions</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">
-      <Filter>Header Files\General</Filter>
+      <Filter>Header Files\Music</Filter>
     </ClInclude>
     <ClInclude Include="Scale.h">
-      <Filter>Header Files\General</Filter>
+      <Filter>Header Files\Music</Filter>
     </ClInclude>
     <ClInclude Include="ScaleGenerator.h">
       <Filter>Header Files\Scale Generator</Filter>
     </ClInclude>
     <ClInclude Include="Chord.h">
-      <Filter>Header Files\General</Filter>
+      <Filter>Header Files\Music</Filter>
     </ClInclude>
     <ClInclude Include="Progression.h">
-      <Filter>Header Files\General\Progressions</Filter>
+      <Filter>Header Files\Music\Progressions</Filter>
     </ClInclude>
     <ClInclude Include="MajorProgression.h">
-      <Filter>Header Files\General\Progressions</Filter>
+      <Filter>Header Files\Music\Progressions</Filter>
     </ClInclude>
     <ClInclude Include="MinorProgression.h">
-      <Filter>Header Files\General\Progressions</Filter>
+      <Filter>Header Files\Music\Progressions</Filter>
+    </ClInclude>
+    <ClInclude Include="GA.h">
+      <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
