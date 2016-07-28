@@ -111,7 +111,7 @@ private:
 	};
 	
 	// All functions below must be specified for each kind of organism.
-	pair<Organism, Organism> crossOver(Organism parent1, Organism parent2);
+	pair<Organism, Organism> crossover(Organism parent1, Organism parent2);
 	void mutate(Organism& child);
 	bool canTerminate();
 	Organism modifySolution(Organism& bestFit);

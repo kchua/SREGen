@@ -34,6 +34,9 @@
     <Filter Include="Header Files\Genetic Algorithms">
       <UniqueIdentifier>{d94be039-9015-4290-bb4b-34c5deaf1995}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Genetic Algorithms">
+      <UniqueIdentifier>{5ecc0380-d39e-47ba-937b-683a01ddd303}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Note.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="ProgressionGraph.cpp">
       <Filter>Source Files\Music\Progressions</Filter>
+    </ClCompile>
+    <ClCompile Include="Progression.cpp">
+      <Filter>Source Files\Genetic Algorithms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,11 +86,11 @@
     <ClInclude Include="GA.h">
       <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="ProgressionGenerator.h">
-      <Filter>Header Files\Genetic Algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="ProgressionGraph.h">
       <Filter>Header Files\Music\Progressions</Filter>
+    </ClInclude>
+    <ClInclude Include="Progression.h">
+      <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
