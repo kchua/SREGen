@@ -19,7 +19,7 @@ ProgressionGraph Progression::graph = MajorProgression();
 
 // initialize random number generators
 uniform_int_distribution<> Progression::selectorRNG = uniform_int_distribution<>(0, 8);
-default_random_engine Progression::selectorGenerator =
+default_random_engine Progression::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 /* Generates a random progression without regard for rules regarding chord
@@ -58,8 +58,8 @@ void Progression::assignFitness(Progression& progression) {
 
 /* Sets the length of the progression, including the starting chord and the
    ending cadence. */
-void Progression::setProgresssionLength(int length) {
-	selectorRNG = uniform_int_distribution<>(0, length - 1 - endingCadence.size());
+void Progression::setProgressionLength(int length) {
+	selectorRNG = uniform_int_distribution<>(0, length - 2 - endingCadence.size());
 	Progression::length = length;
 }
 
@@ -70,7 +70,7 @@ void Progression::setStartingChord(Chord chord) {
 
 /* Sets the ending cadence of the progression. */
 void Progression::setEndingCadence(vector<Chord> cadence) {
-	selectorRNG = uniform_int_distribution<>(0, length - 1 - endingCadence.size());
+	selectorRNG = uniform_int_distribution<>(0, length - 2 - endingCadence.size());
 	Progression::endingCadence = cadence;
 }
 
@@ -83,8 +83,6 @@ void Progression::setMode(bool isMinor) {
 		Progression::graph = MajorProgression();
 	}
 }
-
-
 
 
 /////////////////////
@@ -125,7 +123,16 @@ pair<Progression, Progression> GA<Progression>::crossover(Progression parent1, P
 
 template<>
 void GA<Progression>::mutate(Progression& child) {
-	child.chords;
+	if (rateRNG(generator) <= mutationRate) {
+		child.chords[Progression::selectorRNG(Progression::generator)] =
+			child.graph.getRandomChord();
+	}
+}
+
+// REMOVE THIS METHOD
+void Progression::test() {
+	chords[Progression::selectorRNG(Progression::generator)] =
+		graph.getRandomChord();
 }
 
 template<>
@@ -142,11 +149,27 @@ int main() {
 	Progression::setStartingChord(Chord("i", Note(0), Note(2), Note(4)));
 	Progression::setEndingCadence({ Chord("i", Note(0), Note(2), Note(4)) });
 	Progression::setMode(true);
-	Progression::setProgresssionLength(16);
+	Progression::setProgressionLength(16);
+	cout << "Random generation test" << endl;
 	cout << Progression::generateRandom().outputRomanNumerals() << endl;
 	cout << Progression::generateRandom().outputRomanNumerals() << endl;
 	cout << Progression::generateRandom().outputRomanNumerals() << endl;
 	cout << Progression::generateRandom().outputRomanNumerals() << endl;
 	cout << Progression::generateRandom().outputRomanNumerals() << endl;
 	cout << Progression::generateRandom().outputRomanNumerals() << endl;
+	cout << endl;
+
+	cout << "Mutation test" << endl;
+	Progression p = Progression::generateRandom();
+	cout << p.outputRomanNumerals() << endl;
+	p.test();
+	cout << p.outputRomanNumerals() << endl;
+	p.test();
+	cout << p.outputRomanNumerals() << endl;
+	p.test();
+	cout << p.outputRomanNumerals() << endl;
+	p.test();
+	cout << p.outputRomanNumerals() << endl;
+	p.test();
+	cout << p.outputRomanNumerals() << endl;
 }

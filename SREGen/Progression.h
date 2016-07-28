@@ -14,8 +14,9 @@ class Progression {
 public:
 	static Progression generateRandom();
 	static void assignFitness(Progression& progression);
+	void test(); // REMOVE THIS METHOD
 	
-	static void setProgresssionLength(int length);
+	static void setProgressionLength(int length);
 	static void setStartingChord(Chord chord);
 	static void setEndingCadence(vector<Chord> cadence);
 	static void setMode(bool isMinor);
@@ -32,7 +33,7 @@ private:
 	static vector<Chord> endingCadence;
 	static ProgressionGraph graph;
 	static uniform_int_distribution<> selectorRNG;
-	static default_random_engine selectorGenerator;
+	static default_random_engine generator;
 
 	vector<Chord> chords;
 };

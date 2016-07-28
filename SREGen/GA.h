@@ -22,8 +22,11 @@ public:
 	GA(int popCount, int childCount, int tournamentSize, double crossoverRate, double mutationRate)
 		: popCount(popCount), childCount(childCount), tournamentSize(tournamentSize),
 		  crossoverRate(crossoverRate), mutationRate(mutationRate), 
-		  selectorRNG(0, popCount), rateRNG(0, 1)
+		  selectorRNG(0, popCount - 1), rateRNG(0, 1)
 	{
+		default_random_engine generator =
+			default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+
 		organisms.resize(popCount);
 
 		#pragma omp parallel for
@@ -70,16 +73,16 @@ private:
 	double crossoverRate;
 	double mutationRate;
 	uniform_int_distribution<> selectorRNG;
-	default_random_engine selectorGenerator;
 	uniform_real_distribution<> rateRNG;
+	default_random_engine generator;
 	vector<Organism> organisms;
 
 	/* Holds tournament selection by choosing TOURNAMENTSIZE individuals and returning the
 	   individual with the highest fitness score. */
 	Organism holdTournamentSelection() {
-		Organism bestIndividual = organisms[selectorRNG()];
+		Organism bestIndividual = organisms[selectorRNG(generator)];
 		for (int i = 1; i < tournamentSize; i++) {
-			Organism testIndividual = organisms[selectorRNG()];
+			Organism testIndividual = organisms[selectorRNG(generator)];
 			if (bestIndividual < testIndividual) {
 				bestIndividual = testIndividual;
 			}
