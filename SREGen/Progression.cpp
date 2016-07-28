@@ -118,7 +118,14 @@ string Progression::outputRomanNumerals() {
 
 template<>
 pair<Progression, Progression> GA<Progression>::crossover(Progression parent1, Progression parent2) {
-	return pair<Progression, Progression>();
+	for (int i = 0; i < parent1.chords.size(); i++) {
+		if (rateRNG(generator) <= crossoverRate) {
+			Chord temp = parent1.chords[i];
+			parent1.chords[i] = parent2.chords[i];
+			parent2.chords[i] = temp;
+		}
+	}
+	return pair<Progression, Progression>(parent1, parent2);
 }
 
 template<>
@@ -129,15 +136,9 @@ void GA<Progression>::mutate(Progression& child) {
 	}
 }
 
-// REMOVE THIS METHOD
-void Progression::test() {
-	chords[Progression::selectorRNG(Progression::generator)] =
-		graph.getRandomChord();
-}
-
 template<>
 bool GA<Progression>::canTerminate() {
-	return false;
+	return organisms[0].fitness == 0;
 }
 
 template<>
@@ -146,20 +147,8 @@ Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 }
 
 int main() {
-	Progression::setStartingChord(Chord("i", Note(0), Note(2), Note(4)));
-	Progression::setEndingCadence({ Chord("i", Note(0), Note(2), Note(4)) });
-	Progression::setMode(true);
-	Progression::setProgressionLength(4);
-	cout << "Random generation test" << endl;
-	for (int i = 0; i < 5; i++) {
-		cout << Progression::generateRandom().outputRomanNumerals() << endl;
-	}
-	cout << endl;
-
-	cout << "Mutation test" << endl;
-	Progression p = Progression::generateRandom();
-	for (int i = 0; i < 5; i++) {
-		cout << p.outputRomanNumerals() << endl;
-		p.test();
-	}
+	Progression::setProgressionLength(8);
+	GA<Progression> test(1000, 50, 50, 0.5, 0.05);
+	Progression p = test.runSimulation();
+	cout << p.outputRomanNumerals();
 }

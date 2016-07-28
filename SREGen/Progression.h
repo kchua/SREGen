@@ -14,7 +14,6 @@ class Progression {
 public:
 	static Progression generateRandom();
 	static void assignFitness(Progression& progression);
-	void test(); // REMOVE THIS METHOD
 	
 	static void setProgressionLength(int length);
 	static void setStartingChord(Chord chord);

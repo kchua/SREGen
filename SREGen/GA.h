@@ -32,7 +32,7 @@ public:
 		#pragma omp parallel for
 		for (int i = 0; i < popCount; i++) {
 			organisms[i] = Organism::generateRandom();
-			organisms[i].assignFitness();
+			Organism::assignFitness(organisms[i]);
 		}
 
 		sort(organisms.rbegin(), organisms.rend());
@@ -41,14 +41,16 @@ public:
 	/* Runs the GA experiment and returns the best fit individual that satisfies termination
 	   requirements. */
 	Organism runSimulation() {
+		int gen = 0;
 		while (!canTerminate()) {
+			gen++;
 			vector<Organism> children;
 			children.resize(childCount);
 
 			#pragma omp parallel for
 			for (int i = 0; i < childCount / 2; i++) {
 				pair<Organism, Organism> offspring
-					= crossOver(holdTournamentSelection(), holdTournamentSelection());
+					= crossover(holdTournamentSelection(), holdTournamentSelection());
 				mutate(offspring.first);
 				mutate(offspring.second);
 
@@ -63,6 +65,7 @@ public:
 			addOffspring(children);
 		}
 		modifySolution(organisms[0]);
+		cout << "Experiment terminated after " << gen << " generations(s)." << endl;
 		return organisms[0];
 	};
 
@@ -112,6 +115,7 @@ private:
 				popCounter++;
 			}
 		}
+		organisms = newPopulation;
 	};
 	
 	// All functions below must be specified for each kind of organism.
