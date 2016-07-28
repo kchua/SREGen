@@ -4,6 +4,7 @@
 #include <vector>
 #include <utility>
 #include <algorithm>
+#include <random>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ template<typename Organism>
 //		1. static Organism generateRandom();				- generates a random instance of an organism
 //      2. static void assignFitness(Organism& organism);	- assigns a fitness score to an individual
 //                                                            and keeps an internal record
-//      3. bool operator>(Organism other) const;			- returns whether *this is less fit 
+//      3. bool operator<(Organism other) const;			- returns whether *this is less fit 
 //													          than the other organism.
 class GA {
 public:
@@ -20,7 +21,8 @@ public:
 	   to each one. */
 	GA(int popCount, int childCount, int tournamentSize, double crossoverRate, double mutationRate)
 		: popCount(popCount), childCount(childCount), tournamentSize(tournamentSize),
-		crossoverRate(crossoverRate), mutationRate(mutationRate) 
+		  crossoverRate(crossoverRate), mutationRate(mutationRate), 
+		  SelectorRNG(0, popCount), RateRNG(0, 1)
 	{
 		organisms.resize(popCount);
 
@@ -33,7 +35,7 @@ public:
 		sort(organisms.rbegin(), organisms.rend());
 	};
 	
-	/* Starts the GA experiment and returns the best fit individual that satisfies termination
+	/* Runs the GA experiment and returns the best fit individual that satisfies termination
 	   requirements. */
 	Organism runSimulation() {
 		while (!canTerminate()) {
@@ -47,29 +49,66 @@ public:
 				mutate(offspring.first);
 				mutate(offspring.second);
 
-				offspring.first.assignFitness();
-				offspring.second.assignFitness();
+				Organism::assignFitness(offspring.first);
+				Organism::assignFitness(offspring.second);
 
 				children[2 * i] = offspring.first;
 				children[2 * i + 1] = offspring.second;
 			}
 			
 			sort(children.rbegin(), children.rend());
-			addOffspring();
+			addOffspring(children);
 		}
 		modifySolution(organisms[0]);
 		return organisms[0];
 	};
+
 private:
 	int popCount;
 	int childCount;
 	int tournamentSize;
 	double crossoverRate;
 	double mutationRate;
+	uniform_int_distribution SelectorRNG;
+	uniform_real_distribution RateRNG;
 	vector<Organism> organisms;
 
-	Organism holdTournamentSelection();
-	void addOffspring();
+	/* Holds tournament selection by choosing TOURNAMENTSIZE individuals and returning the
+	   individual with the highest fitness score. */
+	Organism holdTournamentSelection() {
+		Organism bestIndividual = organisms[SelectorRNG()];
+		for (int i = 1; i < tournamentSize; i++) {
+			Organism testIndividual = organisms[SelectorRNG()];
+			if (bestIndividual < testIndividual) {
+				bestIndividual = testIndividual;
+			}
+		}
+		return bestIndividual;
+	};
+
+	/* Combines a sorted list of offspring with a sorted list of the overall population, creating
+	   a new sorted list of the overall population, discarding the least fit CHILDCOUNT
+	   invidivuals. */
+	void addOffspring(vector<Organism>& children) {
+		vector<Organism> newPopulation = vector<Organism>();
+		newPopulation.resize(popCount);
+
+		int popCounter = 0; int childCounter = 0;
+		for (int i = 0; i < popCount; i++) {
+			if (childCounter < childCount) {
+				if (organisms[popCounter] < children[childCounter]) {
+					newPopulation[popCounter + childCounter] = children[childCounter];
+					childCounter++;
+				} else {
+					newPopulation[popCounter + childCounter] = organisms[popCounter];
+					popCounter++;
+				}
+			} else {
+				newPopulation[popCounter + childCounter] = organisms[popCounter];
+				popCounter++;
+			}
+		}
+	};
 	
 	// All functions below must be specified for each kind of organism.
 	pair<Organism, Organism> crossOver(Organism parent1, Organism parent2);
