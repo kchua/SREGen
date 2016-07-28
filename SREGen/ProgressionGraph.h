@@ -5,7 +5,6 @@
 #include <functional>
 #include <vector>
 #include <random>
-#include <algorithm>
 #include "Chord.h"
 
 using namespace std;
