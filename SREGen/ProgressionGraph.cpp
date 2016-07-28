@@ -1,4 +1,4 @@
-#include "Progression.h"
+#include "ProgressionGraph.h"
 #include <assert.h>
 
 ///////////////////////////
@@ -7,9 +7,9 @@
 
 /* Checks if one can progress from the first chord to the second, following
    standard chord progression rules. */
-bool Progression::progressionBetween(Chord first, Chord second) {
-	assert(progressionGraph.find(first) != progressionGraph.end());
-	vector<Chord> neighbors = progressionGraph[first];
+bool ProgressionGraph::progressionBetween(Chord first, Chord second) {
+	assert(graph.find(first) != graph.end());
+	vector<Chord> neighbors = graph[first];
 	vector<Chord>::iterator iter = neighbors.begin();
 	while (iter != neighbors.end()) {
 		if ((*(iter++)) == second) {
@@ -21,7 +21,7 @@ bool Progression::progressionBetween(Chord first, Chord second) {
 
 /* Returns a random chord from any of the chords that can be used in
    a progression, as dictated by this particular Progression object. */
-Chord Progression::getRandomChord() {
+Chord ProgressionGraph::getRandomChord() {
 	return Chord("I", Note(0), Note(2), Note(4)); // TODO: change later
 }
 
@@ -38,34 +38,34 @@ Chord Progression::getRandomChord() {
 
 /* Creates an empty Progression object by setting the appropriate tonic chord,
    which would be linked to every other chord added, as well as itself. */
-Progression::Progression(bool isMinor)
+ProgressionGraph::ProgressionGraph(bool isMinor)
 	: tonicChord(((isMinor) ? "i" : "I"), Note(0), Note(2), Note(4)) {
 	addChord(tonicChord);
 }
 
 /* Adds the chord to the progression if it does not exist yet, and establishes
    a link from the tonic chord to the new chord. */
-void Progression::addChord(Chord chord) {
-	if (progressionGraph.find(chord) == progressionGraph.end()) {
-		progressionGraph[chord] = vector<Chord>();
+void ProgressionGraph::addChord(Chord chord) {
+	if (graph.find(chord) == graph.end()) {
+		graph[chord] = vector<Chord>();
 		makeProgressionBetween(tonicChord, chord);
 	}
 }
 
 /* Creates a directed link from the first chord to the second 
    chord. */
-void Progression::makeProgressionBetween(Chord first, Chord second) {
-	assert(progressionGraph.find(second) != progressionGraph.end());
+void ProgressionGraph::makeProgressionBetween(Chord first, Chord second) {
+	assert(graph.find(second) != graph.end());
 	if (!progressionBetween(first, second)) {
-		progressionGraph.at(first).push_back(second);
+		graph.at(first).push_back(second);
 	}
 }
 
 /* Returns a copy of the tonic chord. */
-Chord Progression::getTonic() {
+Chord ProgressionGraph::getTonic() {
    return tonicChord;
 }
 
-size_t Progression::chordHashFunction::operator()(Chord chord) const {
+size_t ProgressionGraph::chordHashFunction::operator()(Chord chord) const {
 	return std::hash<string>()(chord.getNameWithoutInv());
 }

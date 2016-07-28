@@ -1,9 +1,9 @@
 #ifndef MINORPROGRESSION_H
 #define MINORPROGRESSION_H
 
-#include "Progression.h"
+#include "ProgressionGraph.h"
 
-class MinorProgression : public Progression {
+class MinorProgression : public ProgressionGraph {
 public:
 	MinorProgression();
 };

@@ -1,17 +1,17 @@
-#ifndef PROGRESSION_H
-#define PROGRESSION_H
+#ifndef PROGRESSIONGRAPH_H
+#define PROGRESSIONGRAPH_H
 
 #include <unordered_map>
 #include <functional>
 #include <vector>
 #include "Chord.h"
 
-class Progression {
+class ProgressionGraph {
 public:
 	bool progressionBetween(Chord first, Chord second);
 	Chord getRandomChord();
 protected:
-	Progression(bool isMinor);
+	ProgressionGraph(bool isMinor);
 	void addChord(Chord chord);
 	void makeProgressionBetween(Chord first, Chord second);
 	Chord getTonic();
@@ -20,7 +20,7 @@ private:
 		size_t operator()(Chord chord) const;
 	};
 	Chord tonicChord;
-	unordered_map<Chord, vector<Chord>, chordHashFunction> progressionGraph;
+	unordered_map<Chord, vector<Chord>, chordHashFunction> graph;
 	vector<Chord> chords;
 };
 

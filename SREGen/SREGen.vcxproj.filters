@@ -48,13 +48,13 @@
     <ClCompile Include="Chord.cpp">
       <Filter>Source Files\Music</Filter>
     </ClCompile>
-    <ClCompile Include="Progression.cpp">
-      <Filter>Source Files\Music\Progressions</Filter>
-    </ClCompile>
     <ClCompile Include="MajorProgression.cpp">
       <Filter>Source Files\Music\Progressions</Filter>
     </ClCompile>
     <ClCompile Include="MinorProgression.cpp">
+      <Filter>Source Files\Music\Progressions</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgressionGraph.cpp">
       <Filter>Source Files\Music\Progressions</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,9 +71,6 @@
     <ClInclude Include="Chord.h">
       <Filter>Header Files\Music</Filter>
     </ClInclude>
-    <ClInclude Include="Progression.h">
-      <Filter>Header Files\Music\Progressions</Filter>
-    </ClInclude>
     <ClInclude Include="MajorProgression.h">
       <Filter>Header Files\Music\Progressions</Filter>
     </ClInclude>
@@ -82,6 +79,12 @@
     </ClInclude>
     <ClInclude Include="GA.h">
       <Filter>Header Files\Genetic Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgressionGenerator.h">
+      <Filter>Header Files\Genetic Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgressionGraph.h">
+      <Filter>Header Files\Music\Progressions</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

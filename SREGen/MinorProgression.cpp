@@ -1,6 +1,6 @@
 #include "MinorProgression.h"
 
-MinorProgression::MinorProgression() : Progression(true) {
+MinorProgression::MinorProgression() : ProgressionGraph(true) {
 	vector<Note> notes{ Note(0), Note(1), Note(2), Note(3), Note(4), Note(5), Note(6, 1) };
 	vector<Chord> standard = vector<Chord>();
 	vector<string> names{ "ii0", "III+", "iv", "V", "VI", "vii0" };

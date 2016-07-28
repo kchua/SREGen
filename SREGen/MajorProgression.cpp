@@ -1,7 +1,7 @@
 #include "MajorProgression.h"
 #include <iostream>
 
-MajorProgression::MajorProgression() : Progression(false) {
+MajorProgression::MajorProgression() : ProgressionGraph(false) {
 	vector<Chord> standard = vector<Chord>();
 	vector<string> names{ "ii", "iii", "IV", "V", "vi", "vii0" };
 	Note root(1); Note third(3); Note fifth(5);
@@ -52,7 +52,7 @@ MajorProgression::MajorProgression() : Progression(false) {
 
 /*
 int main() {
-	Progression major = MajorProgression();
+	ProgressionGraph major = MajorProgression();
 
 	Chord toAdd("ii", Note(1), Note(3), Note(5));
 	Chord secondToAdd("V", Note(4), Note(6), Note(1));
