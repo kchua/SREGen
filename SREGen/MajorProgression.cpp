@@ -48,6 +48,8 @@ MajorProgression::MajorProgression() : ProgressionGraph(false) {
 	// Directed edges from the iii chord
 	makeProgressionBetween(standard[2], standard[3]);	// iii -> IV
 	makeProgressionBetween(standard[2], standard[5]);   // iii -> vi
+
+	finalize();
 }
 
 /*

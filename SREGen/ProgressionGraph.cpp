@@ -1,4 +1,5 @@
 #include "ProgressionGraph.h"
+#include <chrono>
 #include <assert.h>
 
 ///////////////////////////
@@ -22,7 +23,7 @@ bool ProgressionGraph::progressionBetween(Chord first, Chord second) {
 /* Returns a random chord from any of the chords that can be used in
    a progression, as dictated by this particular Progression object. */
 Chord ProgressionGraph::getRandomChord() {
-	return Chord("I", Note(0), Note(2), Note(4)); // TODO: change later
+	return chords[ChordRNG(generator)];
 }
 
 
@@ -48,6 +49,7 @@ ProgressionGraph::ProgressionGraph(bool isMinor)
 void ProgressionGraph::addChord(Chord chord) {
 	if (graph.find(chord) == graph.end()) {
 		graph[chord] = vector<Chord>();
+		chords.push_back(chord);
 		makeProgressionBetween(tonicChord, chord);
 	}
 }
@@ -66,6 +68,18 @@ Chord ProgressionGraph::getTonic() {
    return tonicChord;
 }
 
+/* Finalizes a chord progression graph and sets up the random integer generator.
+   Note: any chords added after calling this function is inaccessible by the
+   getRandomChord method. */
+void ProgressionGraph::finalize() {
+	ChordRNG = uniform_int_distribution<>(0, chords.size() - 1);
+
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	generator = default_random_engine(seed);
+}
+
+
+/* Calculates a hash code for Chords based on their name. */
 size_t ProgressionGraph::chordHashFunction::operator()(Chord chord) const {
 	return std::hash<string>()(chord.getNameWithoutInv());
 }

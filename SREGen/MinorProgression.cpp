@@ -57,4 +57,6 @@ MinorProgression::MinorProgression() : ProgressionGraph(true) {
 	// Directed edges from the III chord
 	makeProgressionBetween(altThird, standard[3]);	// III -> iv
 	makeProgressionBetween(altThird, standard[5]);	// III -> VI
+
+	finalize();
 }

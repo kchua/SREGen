@@ -22,7 +22,7 @@ public:
 	GA(int popCount, int childCount, int tournamentSize, double crossoverRate, double mutationRate)
 		: popCount(popCount), childCount(childCount), tournamentSize(tournamentSize),
 		  crossoverRate(crossoverRate), mutationRate(mutationRate), 
-		  SelectorRNG(0, popCount), RateRNG(0, 1)
+		  selectorRNG(0, popCount), rateRNG(0, 1)
 	{
 		organisms.resize(popCount);
 
@@ -69,16 +69,17 @@ private:
 	int tournamentSize;
 	double crossoverRate;
 	double mutationRate;
-	uniform_int_distribution SelectorRNG;
-	uniform_real_distribution RateRNG;
+	uniform_int_distribution<> selectorRNG;
+	default_random_engine selectorGenerator;
+	uniform_real_distribution<> rateRNG;
 	vector<Organism> organisms;
 
 	/* Holds tournament selection by choosing TOURNAMENTSIZE individuals and returning the
 	   individual with the highest fitness score. */
 	Organism holdTournamentSelection() {
-		Organism bestIndividual = organisms[SelectorRNG()];
+		Organism bestIndividual = organisms[selectorRNG()];
 		for (int i = 1; i < tournamentSize; i++) {
-			Organism testIndividual = organisms[SelectorRNG()];
+			Organism testIndividual = organisms[selectorRNG()];
 			if (bestIndividual < testIndividual) {
 				bestIndividual = testIndividual;
 			}
@@ -114,7 +115,7 @@ private:
 	pair<Organism, Organism> crossover(Organism parent1, Organism parent2);
 	void mutate(Organism& child);
 	bool canTerminate();
-	Organism modifySolution(Organism& bestFit);
+	Organism& modifySolution(Organism& bestFit);
 };
 
 #endif
