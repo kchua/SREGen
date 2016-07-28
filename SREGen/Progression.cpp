@@ -18,7 +18,7 @@ vector<Chord> Progression::endingCadence = { Chord("I", Note(0), Note(2), Note(4
 ProgressionGraph Progression::graph = MajorProgression();
 
 // initialize random number generators
-uniform_int_distribution<> Progression::selectorRNG = uniform_int_distribution<>(0, 8);
+uniform_int_distribution<> Progression::selectorRNG = uniform_int_distribution<>(0, 7);
 default_random_engine Progression::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
@@ -27,7 +27,7 @@ default_random_engine Progression::generator =
 Progression Progression::generateRandom() {
 	Progression p = Progression();
 	int size = length - 1 - endingCadence.size();
-	for (int i = 1; i < size; i++) {
+	for (int i = 0; i < size; i++) {
 		p.chords.push_back(graph.getRandomChord());
 	}
 	return p;
@@ -59,7 +59,7 @@ void Progression::assignFitness(Progression& progression) {
 /* Sets the length of the progression, including the starting chord and the
    ending cadence. */
 void Progression::setProgressionLength(int length) {
-	selectorRNG = uniform_int_distribution<>(0, length - 2 - endingCadence.size());
+	Progression::selectorRNG = uniform_int_distribution<>(0, length - 2 - endingCadence.size());
 	Progression::length = length;
 }
 
@@ -70,7 +70,7 @@ void Progression::setStartingChord(Chord chord) {
 
 /* Sets the ending cadence of the progression. */
 void Progression::setEndingCadence(vector<Chord> cadence) {
-	selectorRNG = uniform_int_distribution<>(0, length - 2 - endingCadence.size());
+	Progression::selectorRNG = uniform_int_distribution<>(0, length - 2 - cadence.size());
 	Progression::endingCadence = cadence;
 }
 
@@ -149,27 +149,17 @@ int main() {
 	Progression::setStartingChord(Chord("i", Note(0), Note(2), Note(4)));
 	Progression::setEndingCadence({ Chord("i", Note(0), Note(2), Note(4)) });
 	Progression::setMode(true);
-	Progression::setProgressionLength(16);
+	Progression::setProgressionLength(4);
 	cout << "Random generation test" << endl;
-	cout << Progression::generateRandom().outputRomanNumerals() << endl;
-	cout << Progression::generateRandom().outputRomanNumerals() << endl;
-	cout << Progression::generateRandom().outputRomanNumerals() << endl;
-	cout << Progression::generateRandom().outputRomanNumerals() << endl;
-	cout << Progression::generateRandom().outputRomanNumerals() << endl;
-	cout << Progression::generateRandom().outputRomanNumerals() << endl;
+	for (int i = 0; i < 5; i++) {
+		cout << Progression::generateRandom().outputRomanNumerals() << endl;
+	}
 	cout << endl;
 
 	cout << "Mutation test" << endl;
 	Progression p = Progression::generateRandom();
-	cout << p.outputRomanNumerals() << endl;
-	p.test();
-	cout << p.outputRomanNumerals() << endl;
-	p.test();
-	cout << p.outputRomanNumerals() << endl;
-	p.test();
-	cout << p.outputRomanNumerals() << endl;
-	p.test();
-	cout << p.outputRomanNumerals() << endl;
-	p.test();
-	cout << p.outputRomanNumerals() << endl;
+	for (int i = 0; i < 5; i++) {
+		cout << p.outputRomanNumerals() << endl;
+		p.test();
+	}
 }
