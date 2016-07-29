@@ -12,7 +12,7 @@ music theory.
 requires an existing installation of Lilypond (installer can be
 downloaded [here](http://lilypond.org)).*
 
-### Scale Generator
+### Scale Generator *(temporarily unavailable)*
 Example 1 (generates an A&#9839; natural minor scale):
 
 ```
@@ -33,17 +33,24 @@ Example 2 (generates a B&#9837; major scale):
   the scale (whether the generated scale will be a major, natural minor,
   harmonic minor, or a melodic minor scale).
 
+### Chord Progression Generator
+*Usage instructions coming soon*
+
 ## Progress
-About to encode typical chord progressions in both the major and
-minor tonalities by extending the `Progression` class.
+About to add seventh chords and secondary chords
+**[postponed!]**
+
+Currently fine-tuning the genetic algorithm that generates chord
+progressions, especially the fitness function.
 
 ## Tentative Project Plan
   1. Internal representation of notes and scales
   2. Writing voices onto a pdf file
-  3. **Internal representation of other musical concepts (chords, progressions)**
+  3. Internal representation of other musical concepts (chords,
+     progressions)
   4. Creation of genetic algorithm template
-  5. Harmony generation
-  6. Bass line generation
+  5. **Harmony generation**
+  6. **Bass line generation**
   7. Two-part music
   8. Four-part music generation
   9. Ornamentation
