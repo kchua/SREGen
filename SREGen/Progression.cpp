@@ -9,10 +9,11 @@
 int Progression::length = 10;
 
 // default starting chord is the tonic chord
-Chord Progression::startingChord = Chord("I", Note(0), Note(2), Note(4));
+Chord Progression::startingChord = Chord("i", Note(0), Note(2), Note(4));
 
 // default ending chord is the tonic chord
-vector<Chord> Progression::endingCadence = { Chord("I", Note(0), Note(2), Note(4)) };
+vector<Chord> Progression::endingCadence = { Chord("V", Note(4), Note(6, 1), Note(1)), 
+											 Chord("i", Note(0), Note(2), Note(4)) };
 
 // default mode is major
 ProgressionGraph Progression::graph = MajorProgression();
@@ -36,6 +37,27 @@ Progression Progression::generateRandom() {
 /* Assigns a fitness score to a chord progression. */
 void Progression::assignFitness(Progression& progression) {
 	int score = 0;
+	bool hasPlagal = false;
+	Chord before = Chord(graph.getRandomChord());
+	Chord after = Chord(graph.getRandomChord());
+	for (int i = 0; i < progression.chords.size() + 1; i++) {
+		if (!graph.progressionBetween(progression[i], progression[i + 1])) {
+			score--;
+		}
+		if (progression[i].getBottom().getScaleNum() == 3               // Only one IV -> I
+			&& progression[i + 1].getBottom().getScaleNum() == 0) {
+			if (hasPlagal) {
+				score -= 4;
+			}
+			hasPlagal = true;
+		}
+		if (i > 1 && before == after && after == progression[i]) {
+			score--;
+		}
+		before = after;
+		after = progression[i];
+	}
+	/*
 	if (!graph.progressionBetween(startingChord, progression.chords[0])) {
 		score--;
 	}
@@ -48,7 +70,18 @@ void Progression::assignFitness(Progression& progression) {
 		endingCadence[0])) {
 		score--;
 	}
+	*/
 	progression.fitness = score;
+}
+
+Chord& Progression::operator[](int index) {
+	if (index == 0) {
+		return startingChord;
+	} else if (index < length - endingCadence.size()) {
+		return chords[index - 1];
+	} else {
+		return endingCadence[index - 1 - chords.size()];
+	}
 }
 
 
@@ -147,8 +180,11 @@ Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 }
 
 int main() {
-	Progression::setProgressionLength(8);
-	GA<Progression> test(1000, 50, 50, 0.5, 0.05);
-	Progression p = test.runSimulation();
-	cout << p.outputRomanNumerals();
+	Progression::setProgressionLength(16);
+	Progression::setMode(true);
+	for (int i = 0; i < 5; i++) {
+		GA<Progression> test(500, 20, 30, 0.5, 0.05);
+		Progression p = test.runSimulation();
+		cout << p.outputRomanNumerals() << endl << endl;
+	}
 }

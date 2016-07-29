@@ -22,7 +22,7 @@ public:
 
 	bool operator<(const Progression& other) const;
 	string outputRomanNumerals();
-	Chord operator[](const int index);
+	Chord& operator[](const int index);
 
 	int fitness;
 
