@@ -18,7 +18,7 @@ vector<Chord> Progression::endingCadence = { Chord("V", Note(4), Note(6, 1), Not
 // default mode is major
 ProgressionGraph Progression::graph = MajorProgression();
 
-// initialize random number generators
+// initialize random number generator
 uniform_int_distribution<> Progression::selectorRNG = uniform_int_distribution<>(0, 7);
 default_random_engine Progression::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
@@ -38,8 +38,8 @@ Progression Progression::generateRandom() {
 void Progression::assignFitness(Progression& progression) {
 	int score = 0;
 	bool hasPlagal = false;
-	Chord before = Chord(graph.getRandomChord());
-	Chord after = Chord(graph.getRandomChord());
+	Chord before = graph.getRandomChord();
+	Chord after = graph.getRandomChord();
 	for (int i = 0; i < progression.chords.size() + 1; i++) {
 		if (!graph.progressionBetween(progression[i], progression[i + 1])) {
 			score--;
@@ -178,6 +178,7 @@ template<>
 Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 	return bestFit;
 }
+
 
 int main() {
 	Progression::setProgressionLength(16);
