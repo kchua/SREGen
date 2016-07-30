@@ -36,42 +36,46 @@ Progression Progression::generateRandom() {
 
 /* Assigns a fitness score to a chord progression. */
 void Progression::assignFitness(Progression& progression) {
-	int score = 0;
+	progression.optionalFitness = 0;
+	progression.necessaryFitness = 0;
 	bool hasPlagal = false;
+	bool hasDiminishedResolution = false;
+	bool hasConsecutiveTonics = false;
 	Chord before = graph.getRandomChord();
 	Chord after = graph.getRandomChord();
+
 	for (int i = 0; i < progression.chords.size() + 1; i++) {
 		if (!graph.progressionBetween(progression[i], progression[i + 1])) {
-			score--;
+			progression.necessaryFitness--;
 		}
-		if (progression[i].getBottom().getScaleNum() == 3               // Only one IV -> I
+		if (progression[i].getBottom().getScaleNum() == 3               // Only one IV/iv -> I/i
 			&& progression[i + 1].getBottom().getScaleNum() == 0) {
 			if (hasPlagal) {
-				score -= 4;
+				progression.optionalFitness--;
+			} else {
+				hasPlagal = true;
 			}
-			hasPlagal = true;
+		} else if (progression[i].getBottom().getScaleNum() == 6        // Only one vii0 -> I/i
+			&& progression[i + 1].getBottom().getScaleNum() == 0) {
+			if (hasDiminishedResolution) {
+				progression.optionalFitness--;
+			} else {
+				hasDiminishedResolution = true;
+			}
+		} else if (progression[i].getBottom().getScaleNum() == 0        // Only one I/i -> I/i
+			&& progression[i + 1].getBottom().getScaleNum() == 0) {
+			if (hasConsecutiveTonics) {
+				progression.optionalFitness--;
+			} else {
+				hasConsecutiveTonics = true;
+			}
+		} else if (i > 1 && before == after && after == progression[i]) {
+			progression.optionalFitness--;
 		}
-		if (i > 1 && before == after && after == progression[i]) {
-			score--;
-		}
+
 		before = after;
 		after = progression[i];
 	}
-	/*
-	if (!graph.progressionBetween(startingChord, progression.chords[0])) {
-		score--;
-	}
-	for (int i = 0; i < progression.chords.size() - 1; i++) {
-		if (!graph.progressionBetween(progression.chords[i], progression.chords[i + 1])) {
-			score--;
-		}
-	}
-	if (!graph.progressionBetween(progression.chords[progression.chords.size() - 1],
-		endingCadence[0])) {
-		score--;
-	}
-	*/
-	progression.fitness = score;
 }
 
 Chord& Progression::operator[](int index) {
@@ -124,7 +128,7 @@ void Progression::setMode(bool isMinor) {
 
 /* Returns true if this Progression is less fit than the other progression. */
 bool Progression::operator<(const Progression& other) const {
-	return fitness < other.fitness;
+	return necessaryFitness + optionalFitness < other.necessaryFitness + other.optionalFitness;
 }
 
 /* Output a progression as a string (NOT for lilypond files). */
@@ -171,7 +175,7 @@ void GA<Progression>::mutate(Progression& child) {
 
 template<>
 bool GA<Progression>::canTerminate() {
-	return organisms[0].fitness == 0;
+	return organisms[0].necessaryFitness + (organisms[0].optionalFitness / 2) == 0;
 }
 
 template<>

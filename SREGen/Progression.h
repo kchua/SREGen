@@ -24,7 +24,8 @@ public:
 	string outputRomanNumerals();
 	Chord& operator[](const int index);
 
-	int fitness;
+	int necessaryFitness;
+	int optionalFitness;
 
 private:
 	static int length;
