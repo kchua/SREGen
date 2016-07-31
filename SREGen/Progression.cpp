@@ -9,11 +9,11 @@
 int Progression::length = 16;
 
 // default starting chord is the tonic chord
-Chord Progression::startingChord = Chord("i", Note(0), Note(2), Note(4));
+Chord Progression::startingChord = Chord("I", Note(0), Note(2), Note(4));
 
 // default ending chord is the tonic chord
-vector<Chord> Progression::endingCadence = { Chord("V", Note(4), Note(6, 1), Note(1)), 
-											 Chord("i", Note(0), Note(2), Note(4)) };
+vector<Chord> Progression::endingCadence = { Chord("V", Note(4), Note(6), Note(1)), 
+											 Chord("I", Note(0), Note(2), Note(4)) };
 
 // default mode is major
 ProgressionGraph Progression::graph = MajorProgression();
@@ -180,13 +180,35 @@ bool GA<Progression>::canTerminate() {
 
 template<>
 Progression& GA<Progression>::modifySolution(Progression& bestFit) {
+	for (int i = 0; i < bestFit.length - 2; i++) {
+		if (bestFit[i] == bestFit[i + 1] && bestFit[i].getRootDeg() == 0) {
+			bestFit[i + 1].invert();
+		} else if (bestFit[i] == bestFit[i + 2] && bestFit[i].getBottom().getScaleNum() == 0
+			&& bestFit[i + 1].getRootDeg() == 3) {
+			bestFit[i + 1].invert();
+			bestFit[i + 1].invert();
+			i += 2;
+		} else if (bestFit[i] == bestFit[i + 2] && bestFit[i + 1].getRootDeg() == 4 
+					&& i == bestFit.length - 3) {
+			while (bestFit[i].getBottom().getScaleNum() != 0) {
+				bestFit[i].invert();
+			}
+			bestFit[i].invert();
+			bestFit[i].invert();
+		} else if (bestFit[i].getRootDeg() == 6) {
+			bestFit[i].invert();
+		} else if (bestFit[i].getRootDeg() == 3 && bestFit[i + 1].getRootDeg() == 1) {
+			if (rateRNG(generator) < 1) {
+				bestFit[i + 1].invert();
+			}
+		}
+	}
 	return bestFit;
 }
 
 
 int main() {
 	Progression::setProgressionLength(8);
-	Progression::setMode(true);
 	for (int i = 0; i < 20; i++) {
 		GA<Progression> test(300, 40, 40, 0.5, 0.05);
 		Progression p = test.runSimulation();
