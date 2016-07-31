@@ -175,7 +175,7 @@ void GA<Progression>::mutate(Progression& child) {
 
 template<>
 bool GA<Progression>::canTerminate() {
-	return organisms[0].necessaryFitness + (organisms[0].optionalFitness / 2) == 0;
+	return organisms[0].necessaryFitness == 0;
 }
 
 template<>
