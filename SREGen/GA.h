@@ -43,7 +43,7 @@ public:
 	Organism runSimulation() {
 		int gen = 0;
 		while (!canTerminate()) {
-			gen++;
+			cout << gen++;
 			vector<Organism> children;
 			children.resize(childCount);
 
@@ -64,6 +64,7 @@ public:
 			sort(children.rbegin(), children.rend());
 			addOffspring(children);
 		}
+		cout << endl;
 		modifySolution(organisms[0]);
 		cout << "Experiment terminated after " << gen << " generations(s)." << endl;
 		return organisms[0];

@@ -6,7 +6,7 @@
 ////////////////////
 
 // default length
-int Progression::length = 10;
+int Progression::length = 16;
 
 // default starting chord is the tonic chord
 Chord Progression::startingChord = Chord("i", Note(0), Note(2), Note(4));
@@ -41,6 +41,7 @@ void Progression::assignFitness(Progression& progression) {
 	bool hasPlagal = false;
 	bool hasDiminishedResolution = false;
 	bool hasConsecutiveTonics = false;
+	Chord beforeBefore = graph.getRandomChord();
 	Chord before = graph.getRandomChord();
 	Chord after = graph.getRandomChord();
 
@@ -71,8 +72,14 @@ void Progression::assignFitness(Progression& progression) {
 			}
 		} else if (i > 1 && before == after && after == progression[i]) {
 			progression.optionalFitness--;
+		} else if (i > 2 && beforeBefore.getBottom().getScaleNum() == 4 && // No V -> I/i -> V -> I/i
+			before.getBottom().getScaleNum() == 0 &&
+			after.getBottom().getScaleNum() == 4 &&
+			progression[i].getBottom().getScaleNum() == 0) {
+			progression.necessaryFitness -= 2;
 		}
 
+		beforeBefore = before;
 		before = after;
 		after = progression[i];
 	}
@@ -187,8 +194,8 @@ Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 int main() {
 	Progression::setProgressionLength(16);
 	Progression::setMode(true);
-	for (int i = 0; i < 5; i++) {
-		GA<Progression> test(500, 20, 30, 0.5, 0.05);
+	for (int i = 0; i < 10; i++) {
+		GA<Progression> test(500, 40, 30, 0.5, 0.3);
 		Progression p = test.runSimulation();
 		cout << p.outputRomanNumerals() << endl << endl;
 	}
