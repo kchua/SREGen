@@ -22,6 +22,7 @@ public:
 	string getName();
 	string getNameWithoutInv();
 	string outputChord(Scale& scale, int octave);
+	int getRootDeg();
 
 private:
 	string name;

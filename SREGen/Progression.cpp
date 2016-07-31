@@ -35,53 +35,46 @@ Progression Progression::generateRandom() {
 }
 
 /* Assigns a fitness score to a chord progression. */
-void Progression::assignFitness(Progression& progression) {
-	progression.optionalFitness = 0;
-	progression.necessaryFitness = 0;
+void Progression::assignFitness(Progression& prog) {
+	prog.optionalFitness = 0;
+	prog.necessaryFitness = 0;
 	bool hasPlagal = false;
 	bool hasDiminishedResolution = false;
 	bool hasConsecutiveTonics = false;
-	Chord beforeBefore = graph.getRandomChord();
-	Chord before = graph.getRandomChord();
-	Chord after = graph.getRandomChord();
 
-	for (int i = 0; i < progression.chords.size() + 1; i++) {
-		if (!graph.progressionBetween(progression[i], progression[i + 1])) {
-			progression.necessaryFitness--;
-		}
-		if (progression[i].getBottom().getScaleNum() == 3               // Only one IV/iv -> I/i
-			&& progression[i + 1].getBottom().getScaleNum() == 0) {
+	for (int i = 0; i < prog.chords.size() + 1; i++) {
+		if (!graph.progressionBetween(prog[i], prog[i + 1])) {
+			prog.necessaryFitness--;
+		} else if (prog[i].getBottom().getScaleNum() == 3        // Only one IV/iv -> I/i
+			&& prog[i + 1].getBottom().getScaleNum() == 0) {
 			if (hasPlagal) {
-				progression.optionalFitness--;
+				prog.optionalFitness--;
 			} else {
 				hasPlagal = true;
 			}
-		} else if (progression[i].getBottom().getScaleNum() == 6        // Only one vii0 -> I/i
-			&& progression[i + 1].getBottom().getScaleNum() == 0) {
+		} else if (prog[i].getBottom().getScaleNum() == 6        // Only one vii0 -> I/i
+			&& prog[i + 1].getBottom().getScaleNum() == 0) {
 			if (hasDiminishedResolution) {
-				progression.optionalFitness--;
+				prog.optionalFitness--;
 			} else {
 				hasDiminishedResolution = true;
 			}
-		} else if (progression[i].getBottom().getScaleNum() == 0        // Only one I/i -> I/i
-			&& progression[i + 1].getBottom().getScaleNum() == 0) {
+		} else if (prog[i].getBottom().getScaleNum() == 0        // Only one I/i -> I/i
+			&& prog[i + 1].getBottom().getScaleNum() == 0) {
 			if (hasConsecutiveTonics) {
-				progression.optionalFitness--;
+				prog.optionalFitness--;
 			} else {
 				hasConsecutiveTonics = true;
 			}
-		} else if (i > 1 && before == after && after == progression[i]) {
-			progression.optionalFitness--;
-		} else if (i > 2 && beforeBefore.getBottom().getScaleNum() == 4 && // No V -> I/i -> V -> I/i
-			before.getBottom().getScaleNum() == 0 &&
-			after.getBottom().getScaleNum() == 4 &&
-			progression[i].getBottom().getScaleNum() == 0) {
-			progression.necessaryFitness -= 2;
+		} else if (i > 1 && prog[i] == prog[i - 1]               // No chord repetition more than
+			             && prog[i - 1] == prog[i - 2]) {        // three times in a row.
+			prog.optionalFitness--;				
+		} else if (i > 2 && prog[i - 3].getRootDeg() == 4        // No V -> I/i -> V -> I/i
+						 && prog[i - 2].getRootDeg() == 0 
+						 && prog[i - 1].getRootDeg() == 4 
+						 && prog[i].getRootDeg() == 0) {
+			prog.necessaryFitness -= 2;
 		}
-
-		beforeBefore = before;
-		before = after;
-		after = progression[i];
 	}
 }
 
@@ -192,11 +185,11 @@ Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 
 
 int main() {
-	Progression::setProgressionLength(16);
+	Progression::setProgressionLength(8);
 	Progression::setMode(true);
-	for (int i = 0; i < 10; i++) {
-		GA<Progression> test(500, 40, 30, 0.5, 0.3);
+	for (int i = 0; i < 20; i++) {
+		GA<Progression> test(300, 40, 40, 0.5, 0.05);
 		Progression p = test.runSimulation();
-		cout << p.outputRomanNumerals() << endl << endl;
+		cout << p.outputRomanNumerals() << endl;
 	}
 }

@@ -88,6 +88,18 @@ string Chord::outputChord(Scale& scale, int octave) {
 	return output;
 }
 
+int Chord::getRootDeg() {
+	int i = inversion;
+	while (inversion != 0) {
+		invert();
+	}
+	int temp = getBottom().getScaleNum();
+	while (inversion != i) {
+		invert();
+	}
+	return temp;
+}
+
 /* Sets the octave of a chord. */
 void Chord::setOctave(int octave) {
 	deque<Note>::iterator iter = chord.begin();
