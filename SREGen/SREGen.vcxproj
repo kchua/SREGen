@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BassLine.cpp" />
     <ClCompile Include="Chord.cpp" />
     <ClCompile Include="MajorProgression.cpp" />
     <ClCompile Include="MinorProgression.cpp" />
@@ -121,6 +122,7 @@
     <ClCompile Include="ScaleGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BassLine.h" />
     <ClInclude Include="Chord.h" />
     <ClInclude Include="GA.h" />
     <ClInclude Include="MajorProgression.h" />

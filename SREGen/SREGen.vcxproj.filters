@@ -63,6 +63,9 @@
     <ClCompile Include="Progression.cpp">
       <Filter>Source Files\Genetic Algorithms</Filter>
     </ClCompile>
+    <ClCompile Include="BassLine.cpp">
+      <Filter>Source Files\Music</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="Progression.h">
       <Filter>Header Files\Genetic Algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="BassLine.h">
+      <Filter>Header Files\Music</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
