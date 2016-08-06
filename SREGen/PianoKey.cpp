@@ -20,3 +20,22 @@ PianoKey::PianoKey(string name, int accidental, int octave) {
 	}
 	pairRepr = pair<int, int>(octave, key);
 }
+
+bool PianoKey::operator==(const PianoKey & other) const {
+	return this->pairRepr == other.pairRepr;
+}
+
+bool PianoKey::operator!=(const PianoKey & other) const {
+	return !((*this) == other);
+}
+
+bool PianoKey::operator<(const PianoKey & other) const {
+	return this->pairRepr.first < other.pairRepr.first ||
+		  (this->pairRepr.first == other.pairRepr.first &&
+		   this->pairRepr.second < other.pairRepr.second);
+}
+
+bool PianoKey::operator>(const PianoKey& other) const {
+	return (!((*this) < other)) && (!((*this) == other));
+}
+
