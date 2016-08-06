@@ -31,6 +31,7 @@ BassLine::BassLine() {
 
 }
 
+/*
 int main() {
 	Scale s = Scale::generateScale("e", false);
 	ofstream output;
@@ -48,3 +49,4 @@ int main() {
 	output.close();
 	cout << b.getProgression().outputRomanNumerals();
 }
+*/

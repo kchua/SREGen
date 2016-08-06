@@ -48,8 +48,6 @@ void SG::generateScale(int argc, char* argv[]) {
 	scaleFile << "}";
 }
 
-/*
 int main(int argc, char* argv[]) {
 	SG::generateScale(argc, argv);
 }
-*/
