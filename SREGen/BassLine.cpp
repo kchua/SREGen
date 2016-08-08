@@ -3,6 +3,10 @@
 #include "BassLine.h"
 #include "Scale.h"
 
+uniform_real_distribution<> BassLine::rateRNG = uniform_real_distribution<>(0, 1);
+default_random_engine BassLine::generator =
+	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+
 Note& BassLine::operator[](int index) {
 	return line[index];
 }
@@ -38,12 +42,22 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 	PianoKey scaleTonic = PianoKey(tonic, accidental);
 
 	int baseOctave = (scaleTonic < upperScaleLimit) ? 3 : 2;
-	PianoKey upperBaseLimit = PianoKey("g", 1);
+
+	PianoKey upperBassLimit = PianoKey("g", 1, 3);
+	PianoKey lowerBassLimit = PianoKey("e", -1, 2);
 
 	for (int i = 0; i < length; i++) {
 		line.push_back((*this).prog[i].getBottom());
-		if (scale.getPianoKey(line[i]) < upperBaseLimit) {
-			line[i].setOctave(baseOctave);
+		line[i].setOctave(baseOctave);
+		if (scale.getPianoKey(line[i]) < upperBassLimit) {
+			line[i].setOctave(baseOctave - 1);
+			if (scale.getPianoKey(line[i]) > lowerBassLimit) {
+				if (rateRNG(generator) < 0.5) {
+					line[i].setOctave(baseOctave);
+				}
+			} else {
+				line[i].setOctave(baseOctave);
+			}
 		} else {
 			line[i].setOctave(baseOctave - 1);
 		}
