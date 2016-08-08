@@ -14,7 +14,7 @@ PianoKey::PianoKey(string name, int accidental, int octave) {
 	if (key == -1) {
 		key = 12;
 		octave--;
-	} else if (key = 12) {
+	} else if (key == 12) {
 		key = 0;
 		octave++;
 	}
