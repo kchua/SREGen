@@ -32,7 +32,7 @@ string Scale::operator[](Note note) {
    for comparison uses. */
 PianoKey Scale::getPianoKey(Note note) {
 	string noteName = Scale::getNoteName(note, *this);
-	return PianoKey(to_string(noteName.at(0)),
+	return PianoKey(noteName.substr(0, 1),
 					note.getAccidental(),
 					Scale::calculateNoteOctave(noteName, note, *this));
 }

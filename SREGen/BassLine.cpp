@@ -38,24 +38,29 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 	PianoKey scaleTonic = PianoKey(tonic, accidental);
 
 	int baseOctave = (scaleTonic < upperScaleLimit) ? 3 : 2;
+	PianoKey upperBaseLimit = PianoKey("g", 1);
 
 	for (int i = 0; i < length; i++) {
 		line.push_back((*this).prog[i].getBottom());
-		line[i].setOctave(baseOctave);
+		if (scale.getPianoKey(line[i]) < upperBaseLimit) {
+			line[i].setOctave(baseOctave);
+		} else {
+			line[i].setOctave(baseOctave - 1);
+		}
 	}
 }
 
 int main() {
-	Scale s = Scale::generateScale("g", false);
+	Scale s = Scale::generateScale("f", false);
 	ofstream output;
 	output.open("bassline.ly");
 	output << "{\n";
 	output << "\t\\time 4/4\n";
 	output << "\t\\clef bass\n";
-	output << "\t\\key g \\major\n";
+	output << "\t\\key f \\major\n";
 	output << "\t";
 
-	BassLine b = BassLine::generate(8, "g", false);
+	BassLine b = BassLine::generate(8, "f", false);
 	for (int i = 0; i < b.length(); i++) {
 		output << s[b[i]] << " ";
 	}
