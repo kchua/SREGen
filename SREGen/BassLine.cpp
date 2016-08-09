@@ -38,7 +38,7 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 		}
 	}
 
-	PianoKey upperScaleLimit = PianoKey("g", -1);
+	PianoKey upperScaleLimit = PianoKey("f", 0);
 	PianoKey scaleTonic = PianoKey(tonic, accidental);
 
 	int baseOctave = (scaleTonic < upperScaleLimit) ? 3 : 2;
@@ -54,8 +54,21 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 
 		if (scale.getPianoKey(above) < upperBassLimit) {
 			if (scale.getPianoKey(below) > lowerBassLimit) {
-				if (rateRNG(generator) < 0.5) {
-					line.push_back(below);
+				if (i > 0) {
+					int aboveInterval = above.getIntervalBetween(line[i - 1]);
+					int belowInterval = below.getIntervalBetween(line[i - 1]);
+					if (abs(aboveInterval - belowInterval) == 1) {
+						line.push_back((rateRNG(generator) < 0.5) ? above : below);
+					} else if (aboveInterval - belowInterval == 0) {
+						above.setOctave(line[i - 1].getOctave());
+						line.push_back(above);
+					} else if (aboveInterval < belowInterval) {
+						line.push_back(above);
+					} else {
+						line.push_back(below);
+					}
+				} else {
+					line.push_back((rateRNG(generator) < 0.5) ? above : below);
 				}
 			} else {
 				line.push_back(above);
@@ -67,16 +80,16 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 }
 
 int main() {
-	Scale s = Scale::generateScale("f", false);
+	Scale s = Scale::generateScale("e", false);
 	ofstream output;
 	output.open("bassline.ly");
 	output << "{\n";
 	output << "\t\\time 4/4\n";
 	output << "\t\\clef bass\n";
-	output << "\t\\key f \\major\n";
+	output << "\t\\key e \\major\n";
 	output << "\t";
 
-	BassLine b = BassLine::generate(8, "f", false);
+	BassLine b = BassLine::generate(8, "e", false);
 	for (int i = 0; i < b.length(); i++) {
 		output << s[b[i]] << " ";
 	}

@@ -58,6 +58,25 @@ bool Note::operator==(Note other) {
 	return other.getScaleNum() == this->getScaleNum();
 }
 
+bool Note::operator<=(const Note& other) const {
+	if (this->octave != other.octave) {
+		return this->octave <= other.scaleNum;
+	} else if (this->scaleNum != other.scaleNum) {
+		return this->scaleNum <= other.scaleNum;
+	} else {
+		return this->accidental <= other.accidental;
+	}
+}
+
+int Note::getIntervalBetween(const Note& other) const {
+	Note below = ((*this) <= other) ? (*this) : other;
+	Note above = ((*this) <= other) ? other : (*this);
+	if (below.scaleNum <= above.scaleNum) {
+		return above.scaleNum - below.scaleNum + 1;
+	} else {
+		return above.scaleNum - below.scaleNum + 8;
+	}
+}
 
 ////////////////////////////
 // Other public functions //

@@ -38,4 +38,3 @@ bool PianoKey::operator<(const PianoKey & other) const {
 bool PianoKey::operator>(const PianoKey& other) const {
 	return (!((*this) < other)) && (!((*this) == other));
 }
-
