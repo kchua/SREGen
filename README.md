@@ -36,12 +36,14 @@ Example 2 (generates a B&#9837; major scale):
 ### Chord Progression Generator
 *Usage instructions coming soon*
 
+### Bass Line Generator
+*Usage instructions coming soon*
+
 ## Progress
 About to add seventh chords and secondary chords
 **[postponed!]**
 
-Currently fine-tuning the genetic algorithm that generates chord
-progressions, especially the fitness function.
+Currently making a melody generator.
 
 ## Tentative Project Plan
   1. Internal representation of notes and scales
@@ -50,8 +52,8 @@ progressions, especially the fitness function.
      progressions)
   4. Creation of genetic algorithm template
   5. **Harmony generation**
-  6. **Bass line generation**
-  7. Two-part music
+  6. Bass line generation
+  7. **Two-part music**
   8. Four-part music generation
   9. Ornamentation
   10. Construction of complex music from four-part music (stretch)
