@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "Note.h"
+#include "PianoKey.h"
 
 using namespace std;
 
@@ -11,8 +12,16 @@ class Scale {
 public:
 	static Scale generateScale(string scale, bool isMinor);
 	string operator[](Note note);
+	PianoKey getPianoKey(Note note);
 private:
+	Scale(string scale);
 	static Scale generateScale(string scale, const vector<int>& pattern, bool isFlat);
+	static int keyIndex(string scale, const vector<string>& keyboard);
+	static void correctScaleNote(Scale& s, const vector<string>& keyboard, int curr, int kbIndex);
+	
+	static string getNoteName(Note note, Scale s);
+	static int calculateNoteOctave(string noteName, Note note, Scale s);
+	static void appendOctave(string& noteName, int octave);
 
 	static const vector<string> keyboardSharp;
 	static const vector<string> keyboardFlat;
@@ -22,9 +31,6 @@ private:
 
 	vector<string> keys;
 
-	Scale(string scale);
-	static int keyIndex(string scale, const vector<string>& keyboard);
-	static void correctScaleNote(Scale& s, const vector<string>& keyboard, int curr, int kbIndex);
 };
 
 #endif

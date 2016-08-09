@@ -66,6 +66,9 @@
     <ClCompile Include="BassLine.cpp">
       <Filter>Source Files\Music</Filter>
     </ClCompile>
+    <ClCompile Include="PianoKey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
     <ClInclude Include="BassLine.h">
+      <Filter>Header Files\Music</Filter>
+    </ClInclude>
+    <ClInclude Include="PianoKey.h">
       <Filter>Header Files\Music</Filter>
     </ClInclude>
   </ItemGroup>

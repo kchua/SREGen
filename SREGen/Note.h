@@ -13,6 +13,8 @@ public:
 	Note operator++(int);
 	Note operator--(int);
 	bool operator==(Note other);
+	bool operator<=(const Note& other) const;
+	int getIntervalBetween(const Note& other) const;
 
 	void octaveUp();
 	void octaveDown();
