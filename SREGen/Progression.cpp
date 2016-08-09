@@ -201,6 +201,14 @@ Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 			if (rateRNG(generator) < 1) {
 				bestFit[i + 1].invert();
 			}
+		} else if (bestFit[i].getRootDeg() == 4) {
+			if (rateRNG(generator) < 0.5) {
+				bestFit[i].invert();
+				if (bestFit[i + 1].getRootDeg() == 5) {
+					bestFit[i + 1].invert();
+				}
+				i++;
+			}
 		}
 	}
 	return bestFit;
