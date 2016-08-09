@@ -47,19 +47,21 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 	PianoKey lowerBassLimit = PianoKey("e", -1, 2);
 
 	for (int i = 0; i < length; i++) {
-		line.push_back((*this).prog[i].getBottom());
-		line[i].setOctave(baseOctave);
-		if (scale.getPianoKey(line[i]) < upperBassLimit) {
-			line[i].setOctave(baseOctave - 1);
-			if (scale.getPianoKey(line[i]) > lowerBassLimit) {
+		Note above = (*this).prog[i].getBottom();
+		Note below = (*this).prog[i].getBottom();
+		above.setOctave(baseOctave);
+		below.setOctave(baseOctave - 1);
+
+		if (scale.getPianoKey(above) < upperBassLimit) {
+			if (scale.getPianoKey(below) > lowerBassLimit) {
 				if (rateRNG(generator) < 0.5) {
-					line[i].setOctave(baseOctave);
+					line.push_back(below);
 				}
 			} else {
-				line[i].setOctave(baseOctave);
+				line.push_back(above);
 			}
 		} else {
-			line[i].setOctave(baseOctave - 1);
+			line.push_back(below);
 		}
 	}
 }
