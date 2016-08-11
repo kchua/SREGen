@@ -1,5 +1,11 @@
 #include "Chord.h"
 #include <iostream>
+#include <chrono>
+
+uniform_int_distribution<> Chord::triadRNG = uniform_int_distribution<>(0, 3);
+uniform_int_distribution<> Chord::seventhRNG = uniform_int_distribution<>(0, 4);
+default_random_engine Chord::generator =
+	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 //////////////////
 // Constructors //
@@ -58,6 +64,12 @@ bool Chord::contains(Note& note) {
 /* Returns the note at the bottom of the chord. */
 Note Chord::getBottom() {
 	return chord.front();
+}
+
+/* Returns a random note from the chord. */
+Note Chord::getRandomNote() {
+	uniform_int_distribution<> RNG = (isSeventh) ? seventhRNG : triadRNG;
+	return chord[RNG(generator)];
 }
 
 /* Returns the name of the chord (Roman Numeral), with the inversion appended. */

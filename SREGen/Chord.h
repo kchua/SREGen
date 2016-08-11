@@ -4,6 +4,7 @@
 #include <string>
 #include <deque>
 #include <vector>
+#include <random>
 #include "Note.h"
 #include "Scale.h"
 
@@ -19,12 +20,17 @@ public:
 	void invert();
 	bool contains(Note& note);
 	Note getBottom();
+	Note getRandomNote();
 	string getName();
 	string getNameWithoutInv();
 	string outputChord(Scale& scale, int octave);
 	int getRootDeg();
 
 private:
+	static uniform_int_distribution<> triadRNG;
+	static uniform_int_distribution<> seventhRNG;
+	static default_random_engine generator;
+
 	string name;
 	bool isSeventh;
 	deque<Note> chord;
