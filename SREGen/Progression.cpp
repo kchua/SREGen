@@ -132,12 +132,12 @@ bool Progression::operator<(const Progression& other) const {
 }
 
 /* Output a progression as a string (NOT for lilypond files). */
-string Progression::outputRomanNumerals() {
+string Progression::outputRomanNumerals() const {
 	string output = "";
 	output += startingChord.getName();
 	output += " -> ";
 	for (int i = 0; i < chords.size(); i++) {
-		output += chords[i].getName();
+		output += chords.at(i).getName();
 		output += " -> ";
 	}
 	for (int i = 0; i < endingCadence.size() - 1; i++) {
@@ -153,6 +153,7 @@ string Progression::outputRomanNumerals() {
 // GA method specializations //
 ///////////////////////////////
 
+/* Takes two progressions and performs crossover of chords between them. */
 template<>
 pair<Progression, Progression> GA<Progression>::crossover(Progression parent1, Progression parent2) {
 	for (int i = 0; i < parent1.chords.size(); i++) {
@@ -165,6 +166,7 @@ pair<Progression, Progression> GA<Progression>::crossover(Progression parent1, P
 	return pair<Progression, Progression>(parent1, parent2);
 }
 
+/* Mutates a random chord within the progression from time to time. */
 template<>
 void GA<Progression>::mutate(Progression& child) {
 	if (rateRNG(generator) <= mutationRate) {
@@ -173,11 +175,13 @@ void GA<Progression>::mutate(Progression& child) {
 	}
 }
 
+/* Checks termination conditions. */
 template<>
 bool GA<Progression>::canTerminate() {
 	return organisms[0].necessaryFitness == 0;
 }
 
+/* Modifies the final solution by making common inversions to the chords. */
 template<>
 Progression& GA<Progression>::modifySolution(Progression& bestFit) {
 	for (int i = 0; i < bestFit.length - 2; i++) {

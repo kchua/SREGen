@@ -134,6 +134,7 @@
     <ClInclude Include="Progression.h" />
     <ClInclude Include="Scale.h" />
     <ClInclude Include="ScaleGenerator.h" />
+    <ClInclude Include="TwoPart.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

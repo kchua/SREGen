@@ -3,7 +3,6 @@
 
 #include <string>
 #include <deque>
-#include <vector>
 #include <random>
 #include "Note.h"
 #include "Scale.h"
@@ -21,7 +20,7 @@ public:
 	bool contains(Note& note);
 	Note getBottom();
 	Note getRandomNote();
-	string getName();
+	string getName() const;
 	string getNameWithoutInv();
 	string outputChord(Scale& scale, int octave);
 	int getRootDeg();

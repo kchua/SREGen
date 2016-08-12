@@ -58,6 +58,7 @@ bool Note::operator==(Note other) {
 	return other.getScaleNum() == this->getScaleNum();
 }
 
+/* Returns true if THIS note is lower than or the same as the other scale note. */
 bool Note::operator<=(const Note& other) const {
 	if (this->octave != other.octave) {
 		return this->octave <= other.scaleNum;
@@ -68,6 +69,7 @@ bool Note::operator<=(const Note& other) const {
 	}
 }
 
+/* Returns the interval between two notes. WARNING: 8ves are returned as unisons. */
 int Note::getIntervalBetween(const Note& other) const {
 	Note below = ((*this) <= other) ? (*this) : other;
 	Note above = ((*this) <= other) ? other : (*this);

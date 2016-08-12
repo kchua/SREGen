@@ -1,31 +1,39 @@
 #include <iostream>
 #include <fstream>
+#include <chrono>
 #include "BassLine.h"
 #include "Scale.h"
 
+/* Random number generation stuff. */
 uniform_real_distribution<> BassLine::rateRNG = uniform_real_distribution<>(0, 1);
 default_random_engine BassLine::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
+/* Return a reference to the note at a given index. */
 Note& BassLine::operator[](int index) {
 	return line[index];
 }
 
+/* Generates a BassLine of a given length in a specific key of specific tonality. */
 BassLine BassLine::generate(int length, string key, bool isMinor) {
 	Progression::setProgressionLength(length);
+	Progression::setMode(isMinor);
 	GA<Progression> generator = GA<Progression>(300, 40, 40, 0.5, 0.05);
 	BassLine b = BassLine(key, isMinor, generator.runSimulation(), length);
 	return b;
 }
 
+/* Returns the underlying progression of a bass line. */
 Progression BassLine::getProgression() {
 	return prog;
 }
 
+/* Returns the length of the bass line. */
 int BassLine::length() {
 	return line.size();
 }
 
+/* Creates a bass line of specified length based on a given progression. */
 BassLine::BassLine(string key, bool isMinor, Progression prog, int length) 
 	: scale(Scale::generateScale(key, isMinor)), prog(prog), len(length) {
 	string tonic = key.substr(0, 1);

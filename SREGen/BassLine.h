@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <random>
-#include <chrono>
 #include "GA.h"
 #include "Progression.h"
 #include "Note.h"
@@ -13,7 +12,7 @@ using namespace std;
 class BassLine {
 public:
 	Note& operator[](int index);
-	Progression getProgression();
+	const Progression& getProgression();
 	static BassLine generate(int length, string key, bool isMinor);
 	int length();
 private:

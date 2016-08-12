@@ -67,7 +67,7 @@
       <Filter>Source Files\Music</Filter>
     </ClCompile>
     <ClCompile Include="PianoKey.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Music</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="PianoKey.h">
       <Filter>Header Files\Music</Filter>
+    </ClInclude>
+    <ClInclude Include="TwoPart.h">
+      <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

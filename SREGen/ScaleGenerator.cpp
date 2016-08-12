@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
+#include <string>
 #include "ScaleGenerator.h"
+#include "Note.h"
+#include "Scale.h"
 
-typedef ScaleGenerator SG;
-
-void SG::generateScale(int argc, char* argv[]) {
+/* Generates a scale as directed by command line arguments. */
+void ScaleGenerator::generateScale(int argc, char* argv[]) {
 	string scale = "";
 	string tonality = "";
 	for (int i = 0; i < argc; i++) {

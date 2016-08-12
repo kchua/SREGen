@@ -73,7 +73,7 @@ Note Chord::getRandomNote() {
 }
 
 /* Returns the name of the chord (Roman Numeral), with the inversion appended. */
-string Chord::getName() {
+string Chord::getName() const {
 	string temp = name;
 	return temp.append(((isSeventh) ? seventhInversions : triadInversions)[inversion]);
 }
@@ -100,6 +100,7 @@ string Chord::outputChord(Scale& scale, int octave) {
 	return output;
 }
 
+/* Returns the scale degree of the root of the chord. */
 int Chord::getRootDeg() {
 	int i = inversion;
 	while (inversion != 0) {

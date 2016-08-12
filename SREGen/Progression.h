@@ -21,7 +21,7 @@ public:
 	static void setMode(bool isMinor);
 
 	bool operator<(const Progression& other) const;
-	string outputRomanNumerals();
+	string outputRomanNumerals() const;
 	Chord& operator[](const int index);
 
 	int necessaryFitness;
