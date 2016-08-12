@@ -5,12 +5,12 @@
 #include <fstream>
 #include <string>
 #include "Chord.h"
-#include "GA.h"
 #include "BassLine.h"
 
 class TwoPart {
 	friend class GA<TwoPart>;
 public:
+	TwoPart() = default;
 	static TwoPart generateRandom();
 	static void assignFitness(TwoPart& harmony);
 
@@ -27,7 +27,6 @@ public:
 	int necessaryFitness;
 	int optionalFitness;
 private:
-	TwoPart() = default;
 	vector<Note> melody;
 	static BassLine bass;
 	static int length;

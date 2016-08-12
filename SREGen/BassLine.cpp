@@ -28,6 +28,10 @@ const Progression& BassLine::getProgression() {
 	return prog;
 }
 
+Scale BassLine::getScale() {
+	return scale;
+}
+
 /* Returns the length of the bass line. */
 int BassLine::length() {
 	return line.size();
@@ -87,6 +91,7 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 	}
 }
 
+/*
 int main() {
 	Scale s = Scale::generateScale("e", false);
 	ofstream output;
@@ -105,3 +110,4 @@ int main() {
 	output.close();
 	cout << b.getProgression().outputRomanNumerals();
 }
+*/

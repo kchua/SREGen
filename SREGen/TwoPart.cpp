@@ -1,4 +1,5 @@
 #include "TwoPart.h"
+#include "GA.h"
 
 BassLine TwoPart::bass = BassLine();
 
@@ -95,6 +96,38 @@ bool TwoPart::operator<(const TwoPart& other) const {
 	return this->necessaryFitness + this->optionalFitness < other.necessaryFitness + other.optionalFitness;
 }
 
+void TwoPart::outputToFile(ofstream& file) {
+	Scale scale = bass.getScale();
+	file << "{\n";
+	file << "\t<<\n";
+
+	file << "\t\t\\new Staff {\n";
+	file << "\t\t\t\\time 4/4\n";
+	file << "\t\t\t\\clef treble\n";
+	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? "\\minor\n" : " \\major\n");
+	file << "\t\t\t";
+	for (int i = 0; i < length; i++) {
+		file << scale[melody[i]] << " ";
+	}
+	file << "\n";
+	file << "\t\t}\n";
+
+
+	file << "\t\t\\new Staff {\n";
+	file << "\t\t\t\\clef bass\n";
+	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? "\\minor\n" : " \\major\n");
+	file << "\t\t\t";
+	for (int i = 0; i < length; i++) {
+		file << scale[bass[i]] << " ";
+	}
+	file << "\n";
+	file << "\t\t}\n";
+
+	file << "\t>>";
+	file << "}";
+	file.close();
+	bass.getProgression().outputRomanNumerals();
+}
 
 ///////////////////////////////
 // GA method specializations //
@@ -130,4 +163,13 @@ bool GA<TwoPart>::canTerminate() {
 template<>
 TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
 	return bestFit;
+}
+
+int main() {
+	TwoPart::createBassLine();
+	GA<TwoPart> test(1000, 200, 50, 0.5, 0.01);
+	TwoPart result = test.runSimulation();
+	ofstream output;
+	output.open("twopart.ly");
+	result.outputToFile(output);
 }
