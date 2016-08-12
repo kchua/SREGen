@@ -69,6 +69,9 @@
     <ClCompile Include="PianoKey.cpp">
       <Filter>Source Files\Music</Filter>
     </ClCompile>
+    <ClCompile Include="TwoPart.cpp">
+      <Filter>Source Files\Genetic Algorithms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Note.h">

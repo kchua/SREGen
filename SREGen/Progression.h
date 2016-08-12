@@ -12,6 +12,7 @@
 class Progression {
 	friend class GA<Progression>;
 public:
+	Progression() = default;
 	static Progression generateRandom();
 	static void assignFitness(Progression& progression);
 	
@@ -23,6 +24,7 @@ public:
 	bool operator<(const Progression& other) const;
 	string outputRomanNumerals() const;
 	Chord& operator[](const int index);
+	const Chord& at(const int index) const;
 
 	int necessaryFitness;
 	int optionalFitness;

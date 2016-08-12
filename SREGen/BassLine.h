@@ -11,6 +11,7 @@ using namespace std;
 
 class BassLine {
 public:
+	BassLine() = default;
 	Note& operator[](int index);
 	const Progression& getProgression();
 	static BassLine generate(int length, string key, bool isMinor);

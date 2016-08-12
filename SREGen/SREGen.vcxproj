@@ -121,6 +121,7 @@
     <ClCompile Include="ProgressionGraph.cpp" />
     <ClCompile Include="Scale.cpp" />
     <ClCompile Include="ScaleGenerator.cpp" />
+    <ClCompile Include="TwoPart.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BassLine.h" />

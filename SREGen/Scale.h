@@ -10,6 +10,7 @@ using namespace std;
 
 class Scale {
 public:
+	Scale() = default;
 	static Scale generateScale(string scale, bool isMinor);
 	string operator[](Note note);
 	PianoKey getPianoKey(Note note);

@@ -88,6 +88,16 @@ Chord& Progression::operator[](int index) {
 	}
 }
 
+/* Chord getter method which returns a CONST reference. */
+const Chord& Progression::at(int index) const {
+	if (index == 0) {
+		return startingChord;
+	} else if (index < length - endingCadence.size()) {
+		return chords[index - 1];
+	} else {
+		return endingCadence[index - 1 - chords.size()];
+	}
+}
 
 ///////////////////////////
 // Static Setter Methods //

@@ -67,7 +67,7 @@ Note Chord::getBottom() {
 }
 
 /* Returns a random note from the chord. */
-Note Chord::getRandomNote() {
+Note Chord::getRandomNote() const {
 	uniform_int_distribution<> RNG = (isSeventh) ? seventhRNG : triadRNG;
 	return chord[RNG(generator)];
 }

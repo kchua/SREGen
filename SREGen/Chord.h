@@ -19,7 +19,7 @@ public:
 	void invert();
 	bool contains(Note& note);
 	Note getBottom();
-	Note getRandomNote();
+	Note getRandomNote() const;
 	string getName() const;
 	string getNameWithoutInv();
 	string outputChord(Scale& scale, int octave);

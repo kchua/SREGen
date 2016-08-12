@@ -24,7 +24,7 @@ BassLine BassLine::generate(int length, string key, bool isMinor) {
 }
 
 /* Returns the underlying progression of a bass line. */
-Progression BassLine::getProgression() {
+const Progression& BassLine::getProgression() {
 	return prog;
 }
 
