@@ -9,6 +9,9 @@ string TwoPart::key = "c";
 
 bool TwoPart::isMinor = false;
 
+const PianoKey TwoPart::lowerBound = PianoKey("f", 0, 4);
+const PianoKey TwoPart::upperBound = PianoKey("g", 0, 5);
+
 uniform_int_distribution<> TwoPart::selectorRNG = uniform_int_distribution<>(0, 7);
 uniform_int_distribution<> TwoPart::octaveRNG = uniform_int_distribution<>(4, 5);
 default_random_engine TwoPart::generator =
@@ -31,20 +34,35 @@ void TwoPart::assignFitness(TwoPart& harmony) {
 			harmony.bass[i].getScaleNum() == 6) {
 			harmony.necessaryFitness -= 10;
 		}
+		
+		Scale scale = bass.getScale();
+		if (scale.getPianoKey(harmony.melody[i]) < lowerBound) {
+			harmony.necessaryFitness -= 10;
+		} else if (scale.getPianoKey(harmony.melody[i]) > upperBound) {
+			harmony.necessaryFitness -= 10;
+		}
+
 		if (i > 0) {
 			if (harmony.melody[i - 1].getScaleNum() == 6 &&
 				harmony.melody[i].getScaleNum() != 0) {
 				harmony.necessaryFitness -= 10;
 			} else if (harmony.melody[i - 1].getScaleNum() == 4 &&
 				       harmony.melody[i].getScaleNum() != 3) {
-				harmony.necessaryFitness -= 10;
+				harmony.necessaryFitness -= 10 * (length - i);
 			}
 			int prevInterval = harmony.melody[i - 1].getIntervalBetween(harmony.bass[i - 1]);
 			int currInterval = harmony.melody[i].getIntervalBetween(harmony.bass[i]);
 			if (currInterval == prevInterval) {
 				if (currInterval == 5 || currInterval == 1) {
-					harmony.necessaryFitness -= 10;
+					harmony.necessaryFitness -= 10 * (length - i);
 				}
+			}
+			Note above = harmony.melody[i - 1];
+			Note below = above;
+			above.setOctave(above.getOctave() + 1);
+			below.setOctave(below.getOctave() - 1);
+			if (!(below <= harmony.melody[i]) || !(harmony.melody[i] <= above)) {
+				harmony.necessaryFitness -= 10;
 			}
 			if (i > 1) {
 				if ((harmony.melody[i - 1].getIntervalBetween(harmony.melody[i - 2]) >= 4) ||
@@ -52,12 +70,12 @@ void TwoPart::assignFitness(TwoPart& harmony) {
 						harmony.melody[i - 1].getOctave() != harmony.melody[i - 2].getOctave())) {
 					Note prev = harmony.melody[i - 1];
 					if (harmony.melody[i - 2] <= harmony.melody[i - 1]) {
-						if (!((--prev) == harmony.melody[i])) {
-							harmony.optionalFitness--;
+						if (!((--prev) == harmony.melody[i] && prev.getOctave() == harmony.melody[i].getOctave())) {
+							harmony.optionalFitness -= 5 * (length - i);
 						}
 					} else {
-						if (!((++prev) == harmony.melody[i])) {
-							harmony.optionalFitness--;
+						if (!((++prev) == harmony.melody[i] && prev.getOctave() == harmony.melody[i].getOctave())) {
+							harmony.optionalFitness -= 5 * (length - i);
 						}
 					}
 				}
@@ -152,6 +170,7 @@ void GA<TwoPart>::mutate(TwoPart& child) {
 	if (rateRNG(generator) <= mutationRate) {
 		int index = TwoPart::selectorRNG(TwoPart::generator);
 		child.melody[index] = child.bass.getProgression().at(index).getRandomNote();
+		child.melody[index].setOctave(TwoPart::octaveRNG(TwoPart::generator));
 	}
 }
 
@@ -167,7 +186,7 @@ TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
 
 int main() {
 	TwoPart::createBassLine();
-	GA<TwoPart> test(1000, 200, 50, 0.5, 0.01);
+	GA<TwoPart> test(500, 500, 50, 0.5, 0.7);
 	TwoPart result = test.runSimulation();
 	ofstream output;
 	output.open("twopart.ly");

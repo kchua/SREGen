@@ -61,7 +61,7 @@ bool Note::operator==(Note other) {
 /* Returns true if THIS note is lower than or the same as the other scale note. */
 bool Note::operator<=(const Note& other) const {
 	if (this->octave != other.octave) {
-		return this->octave <= other.scaleNum;
+		return this->octave <= other.octave;
 	} else if (this->scaleNum != other.scaleNum) {
 		return this->scaleNum <= other.scaleNum;
 	} else {

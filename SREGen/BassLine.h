@@ -14,7 +14,7 @@ public:
 	BassLine() = default;
 	Note& operator[](int index);
 	const Progression& getProgression();
-	Scale getScale();
+	Scale& getScale();
 	static BassLine generate(int length, string key, bool isMinor);
 	int length();
 private:

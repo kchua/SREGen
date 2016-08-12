@@ -44,7 +44,7 @@ public:
 	Organism runSimulation() {
 		int gen = 0;
 		while (!canTerminate()) {
-			gen++;
+			cout << gen++;
 			vector<Organism> children;
 			children.resize(childCount);
 

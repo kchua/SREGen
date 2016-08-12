@@ -6,6 +6,7 @@
 #include <string>
 #include "Chord.h"
 #include "BassLine.h"
+#include "PianoKey.h"
 
 class TwoPart {
 	friend class GA<TwoPart>;
@@ -32,6 +33,8 @@ private:
 	static int length;
 	static string key;
 	static bool isMinor;
+	static const PianoKey lowerBound;
+	static const PianoKey upperBound;
 	static uniform_int_distribution<> selectorRNG;
 	static uniform_int_distribution<> octaveRNG;
 	static default_random_engine generator;

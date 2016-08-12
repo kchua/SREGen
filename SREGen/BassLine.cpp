@@ -28,7 +28,7 @@ const Progression& BassLine::getProgression() {
 	return prog;
 }
 
-Scale BassLine::getScale() {
+Scale& BassLine::getScale() {
 	return scale;
 }
 
