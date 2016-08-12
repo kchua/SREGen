@@ -27,7 +27,7 @@ public:
 	int necessaryFitness;
 	int optionalFitness;
 private:
-	TwoPart();
+	TwoPart() = default;
 	vector<Note> melody;
 	static BassLine bass;
 	static int length;

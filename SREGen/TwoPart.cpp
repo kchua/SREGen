@@ -2,6 +2,17 @@
 
 BassLine TwoPart::bass = BassLine();
 
+int TwoPart::length = 8;
+
+string TwoPart::key = "c";
+
+bool TwoPart::isMinor = false;
+
+uniform_int_distribution<> TwoPart::selectorRNG = uniform_int_distribution<>(0, 7);
+uniform_int_distribution<> TwoPart::octaveRNG = uniform_int_distribution<>(4, 5);
+default_random_engine TwoPart::generator =
+	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+
 /* Generates a random melody for a bass line.
    WARNING: must call createBassLine method before calling this function! */
 TwoPart TwoPart::generateRandom() {
@@ -12,7 +23,6 @@ TwoPart TwoPart::generateRandom() {
 	}
 	return harmony;
 }
-
 
 void TwoPart::setProgressionStartingChord(Chord chord) {
 	Progression::setStartingChord(chord);
@@ -49,6 +59,7 @@ bool TwoPart::operator<(const TwoPart& other) const {
 // GA method specializations //
 ///////////////////////////////
 
+/*
 template<>
 pair<TwoPart, TwoPart> GA<TwoPart>::crossover(TwoPart parent1, TwoPart parent2) {
 
@@ -68,3 +79,4 @@ template<>
 TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
 
 }
+*/

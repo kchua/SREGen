@@ -2,8 +2,8 @@
 #include <iostream>
 #include <chrono>
 
-uniform_int_distribution<> Chord::triadRNG = uniform_int_distribution<>(0, 3);
-uniform_int_distribution<> Chord::seventhRNG = uniform_int_distribution<>(0, 4);
+uniform_int_distribution<> Chord::triadRNG = uniform_int_distribution<>(0, 2);
+uniform_int_distribution<> Chord::seventhRNG = uniform_int_distribution<>(0, 3);
 default_random_engine Chord::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
