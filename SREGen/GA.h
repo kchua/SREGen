@@ -43,8 +43,9 @@ public:
 	   requirements. */
 	Organism runSimulation() {
 		int gen = 0;
+		double mRate = mutationRate;
 		while (!canTerminate()) {
-			cout << gen++;
+			cout << gen++ << " ";
 			vector<Organism> children;
 			children.resize(childCount);
 
@@ -64,6 +65,21 @@ public:
 			
 			sort(children.rbegin(), children.rend());
 			addOffspring(children);
+
+			if (organisms[0].necessaryFitness == -1) {
+				Organism::assignFitness(organisms[0]);
+			}
+
+			if (!(organisms[popCount / 2] < organisms[1])) {
+				cout << "| ";
+				#pragma omp parallel for
+				for (int i = 1; i < popCount; i++) {
+					organisms[i] = Organism::generateRandom();
+					Organism::assignFitness(organisms[i]);
+				}
+
+				sort(organisms.rbegin(), organisms.rend());
+			}
 		}
 		modifySolution(organisms[0]);
 		cout << "Experiment terminated after " << gen << " generations(s)." << endl;
@@ -104,12 +120,12 @@ private:
 		int popCounter = 0; int childCounter = 0;
 		for (int i = 0; i < popCount; i++) {
 			if (childCounter < childCount) {
-				if (organisms[popCounter] < children[childCounter]) {
-					newPopulation[popCounter + childCounter] = children[childCounter];
-					childCounter++;
-				} else {
+				if (children[childCounter] < organisms[popCounter]) {
 					newPopulation[popCounter + childCounter] = organisms[popCounter];
 					popCounter++;
+				} else {
+					newPopulation[popCounter + childCounter] = children[childCounter];
+					childCounter++;
 				}
 			} else {
 				newPopulation[popCounter + childCounter] = organisms[popCounter];

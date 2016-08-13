@@ -13,7 +13,7 @@ const PianoKey TwoPart::lowerBound = PianoKey("f", 0, 4);
 const PianoKey TwoPart::upperBound = PianoKey("g", 0, 5);
 
 uniform_int_distribution<> TwoPart::selectorRNG = uniform_int_distribution<>(0, 7);
-uniform_int_distribution<> TwoPart::octaveRNG = uniform_int_distribution<>(4, 5);
+uniform_int_distribution<> TwoPart::octaveRNG = uniform_int_distribution<>(3, 5);
 default_random_engine TwoPart::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
@@ -30,55 +30,56 @@ TwoPart TwoPart::generateRandom() {
 
 void TwoPart::assignFitness(TwoPart& harmony) {
 	for (int i = 0; i < length; i++) {
-		if (harmony.melody[i].getScaleNum() == 6 &&
-			harmony.bass[i].getScaleNum() == 6) {
-			harmony.necessaryFitness -= 10;
-		}
-		
-		Scale scale = bass.getScale();
-		if (scale.getPianoKey(harmony.melody[i]) < lowerBound) {
-			harmony.necessaryFitness -= 10;
-		} else if (scale.getPianoKey(harmony.melody[i]) > upperBound) {
-			harmony.necessaryFitness -= 10;
-		}
-
-		if (i > 0) {
-			if (harmony.melody[i - 1].getScaleNum() == 6 &&
-				harmony.melody[i].getScaleNum() != 0) {
-				harmony.necessaryFitness -= 10;
-			} else if (harmony.melody[i - 1].getScaleNum() == 4 &&
-				       harmony.melody[i].getScaleNum() != 3) {
-				harmony.necessaryFitness -= 10 * (length - i);
-			}
-			int prevInterval = harmony.melody[i - 1].getIntervalBetween(harmony.bass[i - 1]);
-			int currInterval = harmony.melody[i].getIntervalBetween(harmony.bass[i]);
-			if (currInterval == prevInterval) {
-				if (currInterval == 5 || currInterval == 1) {
-					harmony.necessaryFitness -= 10 * (length - i);
-				}
-			}
+		PianoKey curr = harmony.bass.getScale().getPianoKey(harmony.melody[i]);
+		if (curr > upperBound || curr < lowerBound) {                                                    // Has to stay in range
+			harmony.necessaryFitness -= 1 * (length - i);
+			return;
+		} else if (harmony.melody[i].getScaleNum() == harmony.bass[i].getScaleNum() &&                   // No doubled 7th
+			harmony.melody[i].getScaleNum() == 6) {
+			harmony.necessaryFitness -= 1 * (length - i);
+			return;
+		} else if (i > 0) {
 			Note above = harmony.melody[i - 1];
 			Note below = above;
 			above.setOctave(above.getOctave() + 1);
 			below.setOctave(below.getOctave() - 1);
-			if (!(below <= harmony.melody[i]) || !(harmony.melody[i] <= above)) {
-				harmony.necessaryFitness -= 10;
-			}
-			if (i > 1) {
-				if ((harmony.melody[i - 1].getIntervalBetween(harmony.melody[i - 2]) >= 4) ||
-					(harmony.melody[i - 1] == harmony.melody[i - 2] && 
-						harmony.melody[i - 1].getOctave() != harmony.melody[i - 2].getOctave())) {
-					Note prev = harmony.melody[i - 1];
-					if (harmony.melody[i - 2] <= harmony.melody[i - 1]) {
-						if (!((--prev) == harmony.melody[i] && prev.getOctave() == harmony.melody[i].getOctave())) {
-							harmony.optionalFitness -= 5 * (length - i);
-						}
+			if (below <= harmony.melody[i] && harmony.melody[i] <= above) {
+				int currInterval = harmony.melody[i].getIntervalBetween(harmony.bass[i]);
+				int prevInterval = harmony.melody[i - 1].getIntervalBetween(harmony.bass[i - 1]);
+				if (currInterval == prevInterval && (currInterval == 5 || currInterval == 1)) {          // No parallel fifths
+					harmony.necessaryFitness -= 1 * (length - i);
+					return;
+				} else if (harmony.bass.getProgression().at(i - 1).getNameWithoutInv() == "V" &&
+					       harmony.melody[i - 1].getScaleNum() == 6 &&                                   // 7 -> 1
+					       (harmony.melody[i].getScaleNum() != 0 ||
+						    harmony.melody[i - 1].getOctave() != harmony.melody[i].getOctave() - 1)) {
+					harmony.necessaryFitness -= 1 * (length - i);
+					return;
+				} else if (harmony.melody[i - 1].getScaleNum() == 3 &&                                   // 3 -> 4
+					harmony.melody[i].getScaleNum() != 2) {
+					harmony.necessaryFitness -= 1 * (length - i);
+					return;
+				} else if (i > 2 && 
+					       (harmony.melody[i - 1].getIntervalBetween(harmony.melody[i - 2]) >= 4 ||
+							(harmony.melody[i - 1] == harmony.melody[i - 2] &&
+							 harmony.melody[i - 1].getOctave() != harmony.melody[i - 2].getOctave()))) {
+					Note step = harmony.melody[i - 1];
+					Note leap = step;
+					if (harmony.melody[i - 1] <= harmony.melody[i - 2]) {
+						step++;
+						(leap++)++;
 					} else {
-						if (!((++prev) == harmony.melody[i] && prev.getOctave() == harmony.melody[i].getOctave())) {
-							harmony.optionalFitness -= 5 * (length - i);
-						}
+						step--;
+						(leap--)--;
 					}
-				}
+					if (!(harmony.melody[i] == step || harmony.melody[i] == leap)) {             // Leaps greater than a fourth
+						harmony.necessaryFitness -= 1 * (length - i);                            // are followed by a step
+						return;
+					}                                                                            // (or a third leap) in the opposite
+				}																		         // direction
+			} else {
+				harmony.necessaryFitness -= 1 * (length - i);                                   // No leaps greater than an octave
+				return;
 			}
 		}
 	}
@@ -154,6 +155,15 @@ void TwoPart::outputToFile(ofstream& file) {
 
 template<>
 pair<TwoPart, TwoPart> GA<TwoPart>::crossover(TwoPart parent1, TwoPart parent2) {
+	if (rateRNG(generator) <= crossoverRate) {
+		int index = TwoPart::selectorRNG(TwoPart::generator);
+		for (int i = index; i < TwoPart::length; i++) {
+			Note temp = parent1.melody[i];
+			parent1.melody[i] = parent2.melody[i];
+			parent2.melody[i] = temp;
+		}
+	}
+	/*
 	for (int i = 0; i < TwoPart::length; i++) {
 		if (rateRNG(generator) <= crossoverRate) {
 			Note temp = parent1.melody[i];
@@ -161,6 +171,7 @@ pair<TwoPart, TwoPart> GA<TwoPart>::crossover(TwoPart parent1, TwoPart parent2) 
 			parent2.melody[i] = temp;
 		}
 	}
+	*/
 	return pair<TwoPart, TwoPart>(parent1, parent2);
 }
 
@@ -185,10 +196,15 @@ TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
 }
 
 int main() {
+	TwoPart::setKey("c");
+	TwoPart::setTonality(true);
+	TwoPart::setProgressionStartingChord(Chord("i", Note(0), Note(2), Note(4)));
+	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6, 1), Note(1)), Chord("i", Note(0), Note(2), Note(4)) });
 	TwoPart::createBassLine();
-	GA<TwoPart> test(500, 500, 50, 0.5, 0.7);
+	GA<TwoPart> test(100, 50, 2, 0.6, 0.1);
 	TwoPart result = test.runSimulation();
 	ofstream output;
 	output.open("twopart.ly");
 	result.outputToFile(output);
+	TwoPart::assignFitness(result);
 }

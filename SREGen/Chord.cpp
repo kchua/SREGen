@@ -79,7 +79,7 @@ string Chord::getName() const {
 }
 
 /* Returns the name of the chord without appending the inversion of the chord. */
-string Chord::getNameWithoutInv() {
+string Chord::getNameWithoutInv() const {
 	return name;
 }
 

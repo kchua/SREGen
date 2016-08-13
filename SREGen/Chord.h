@@ -21,7 +21,7 @@ public:
 	Note getBottom();
 	Note getRandomNote() const;
 	string getName() const;
-	string getNameWithoutInv();
+	string getNameWithoutInv() const;
 	string outputChord(Scale& scale, int octave);
 	int getRootDeg();
 

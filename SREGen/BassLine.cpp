@@ -51,9 +51,15 @@ BassLine::BassLine(string key, bool isMinor, Progression prog, int length)
 	}
 
 	PianoKey upperScaleLimit = PianoKey("f", 0);
+	PianoKey exceptionLowerBound = PianoKey("g", 0);
 	PianoKey scaleTonic = PianoKey(tonic, accidental);
 
 	int baseOctave = (scaleTonic < upperScaleLimit) ? 3 : 2;
+	if (baseOctave == 2) {
+		if (scaleTonic > exceptionLowerBound) {
+			baseOctave = 3;
+		}
+	}
 
 	PianoKey upperBassLimit = PianoKey("g", 1, 3);
 	PianoKey lowerBassLimit = PianoKey("e", -1, 2);
