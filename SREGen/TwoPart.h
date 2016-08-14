@@ -9,11 +9,14 @@
 #include "PianoKey.h"
 
 class TwoPart {
-	friend class GA<TwoPart>;
+private:
+	class Segment;
+	friend class GA<Segment>;
 public:
 	TwoPart() = default;
-	static TwoPart generateRandom();
-	static void assignFitness(TwoPart& harmony);
+	TwoPart generateHarmony();
+
+	int checkCorrectness(const vector<Note>& melody, int start, int end) const;
 
 	static void setProgressionStartingChord(Chord chord);
 	static void setEndingCadence(vector<Chord> cadence);
@@ -22,22 +25,13 @@ public:
 	static void setTonality(bool isMinor);
 	static void createBassLine();
 
-	bool operator<(const TwoPart& other) const;
 	void outputToFile(ofstream& file);
 
-	int necessaryFitness;
-	int optionalFitness;
 private:
-	vector<Note> melody;
 	static BassLine bass;
 	static int length;
 	static string key;
 	static bool isMinor;
-	static const PianoKey lowerBound;
-	static const PianoKey upperBound;
-	static uniform_int_distribution<> selectorRNG;
-	static uniform_int_distribution<> octaveRNG;
-	static default_random_engine generator;
 };
 
 #endif

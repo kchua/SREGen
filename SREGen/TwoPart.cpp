@@ -1,4 +1,5 @@
 #include "TwoPart.h"
+#include "TwoPart_Segment.h"
 #include "GA.h"
 
 BassLine TwoPart::bass = BassLine();
@@ -201,6 +202,11 @@ bool GA<TwoPart>::canTerminate() {
 template<>
 TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
 	return bestFit;
+}
+
+template<>
+void GA<TwoPart::Segment>::mutate(TwoPart::Segment& child) {
+
 }
 
 int main() {

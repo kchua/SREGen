@@ -110,5 +110,8 @@
     <ClInclude Include="TwoPart.h">
       <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
+    <ClInclude Include="TwoPart_Segment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
