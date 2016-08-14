@@ -29,6 +29,8 @@ TwoPart TwoPart::generateRandom() {
 }
 
 void TwoPart::assignFitness(TwoPart& harmony) {
+	harmony.necessaryFitness = 0;
+	harmony.optionalFitness = 0;
 	for (int i = 0; i < length; i++) {
 		PianoKey curr = harmony.bass.getScale().getPianoKey(harmony.melody[i]);
 		if (curr > upperBound || curr < lowerBound) {                                                    // Has to stay in range
@@ -49,17 +51,17 @@ void TwoPart::assignFitness(TwoPart& harmony) {
 				if (currInterval == prevInterval && (currInterval == 5 || currInterval == 1)) {          // No parallel fifths
 					harmony.necessaryFitness -= 1 * (length - i);
 					return;
-				} else if (harmony.bass.getProgression().at(i - 1).getNameWithoutInv() == "V" &&
-					       harmony.melody[i - 1].getScaleNum() == 6 &&                                   // 7 -> 1
+				} else if (harmony.melody[i - 1].getScaleNum() == 6 &&                                   // 7 -> 1
 					       (harmony.melody[i].getScaleNum() != 0 ||
 						    harmony.melody[i - 1].getOctave() != harmony.melody[i].getOctave() - 1)) {
 					harmony.necessaryFitness -= 1 * (length - i);
 					return;
 				} else if (harmony.melody[i - 1].getScaleNum() == 3 &&                                   // 3 -> 4
-					harmony.melody[i].getScaleNum() != 2) {
+						   (harmony.melody[i].getScaleNum() != 2 ||
+							harmony.melody[i - 1].getOctave() != harmony.melody[i].getOctave())) {
 					harmony.necessaryFitness -= 1 * (length - i);
 					return;
-				} else if (i > 2 && 
+				} else if (i > 1 &&
 					       (harmony.melody[i - 1].getIntervalBetween(harmony.melody[i - 2]) >= 4 ||
 							(harmony.melody[i - 1] == harmony.melody[i - 2] &&
 							 harmony.melody[i - 1].getOctave() != harmony.melody[i - 2].getOctave()))) {
@@ -72,7 +74,8 @@ void TwoPart::assignFitness(TwoPart& harmony) {
 						step--;
 						(leap--)--;
 					}
-					if (!(harmony.melody[i] == step || harmony.melody[i] == leap)) {             // Leaps greater than a fourth
+					if (!(harmony.melody[i].getScaleNum() == step.getScaleNum() || 
+						  harmony.melody[i].getScaleNum() == leap.getScaleNum())) {             // Leaps greater than a fourth
 						harmony.necessaryFitness -= 1 * (length - i);                            // are followed by a step
 						return;
 					}                                                                            // (or a third leap) in the opposite
@@ -180,8 +183,13 @@ template<>
 void GA<TwoPart>::mutate(TwoPart& child) {
 	if (rateRNG(generator) <= mutationRate) {
 		int index = TwoPart::selectorRNG(TwoPart::generator);
-		child.melody[index] = child.bass.getProgression().at(index).getRandomNote();
-		child.melody[index].setOctave(TwoPart::octaveRNG(TwoPart::generator));
+		if (rateRNG(generator) <= 0.25) {
+			int prevOctave = child.melody[index].getOctave();
+			child.melody[index] = child.bass.getProgression().at(index).getRandomNote();
+			child.melody[index].setOctave(prevOctave);
+		} else {
+			child.melody[index].setOctave(TwoPart::octaveRNG(TwoPart::generator));
+		}
 	}
 }
 
@@ -196,15 +204,15 @@ TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
 }
 
 int main() {
-	TwoPart::setKey("c");
-	TwoPart::setTonality(true);
-	TwoPart::setProgressionStartingChord(Chord("i", Note(0), Note(2), Note(4)));
-	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6, 1), Note(1)), Chord("i", Note(0), Note(2), Note(4)) });
+	TwoPart::setLength(8);
+	TwoPart::setKey("bes");
+	TwoPart::setTonality(false);
+	TwoPart::setProgressionStartingChord(Chord("I", Note(0), Note(2), Note(4)));
+	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6), Note(1)), Chord("I", Note(0), Note(2), Note(4)) });
 	TwoPart::createBassLine();
-	GA<TwoPart> test(100, 50, 2, 0.6, 0.1);
+	GA<TwoPart> test(300, 150, 2, 0.9, 0.5);
 	TwoPart result = test.runSimulation();
 	ofstream output;
 	output.open("twopart.ly");
 	result.outputToFile(output);
-	TwoPart::assignFitness(result);
 }

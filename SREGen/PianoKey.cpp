@@ -14,7 +14,7 @@ const keyMap PianoKey::keysToIndices = keyMap{ {"c", 0},
 PianoKey::PianoKey(string name, int accidental, int octave) {
 	int key = keysToIndices.at(name) + accidental;
 	if (key == -1) {
-		key = 12;
+		key = 11;
 		octave--;
 	} else if (key == 12) {
 		key = 0;

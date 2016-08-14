@@ -66,11 +66,8 @@ public:
 			sort(children.rbegin(), children.rend());
 			addOffspring(children);
 
-			if (organisms[0].necessaryFitness == -1) {
-				Organism::assignFitness(organisms[0]);
-			}
-
-			if (!(organisms[popCount / 2] < organisms[1])) {
+			/*
+			if (!(organisms[popCount / 2] < organisms[0])) {
 				cout << "| ";
 				#pragma omp parallel for
 				for (int i = 1; i < popCount; i++) {
@@ -80,6 +77,7 @@ public:
 
 				sort(organisms.rbegin(), organisms.rend());
 			}
+			*/
 		}
 		modifySolution(organisms[0]);
 		cout << "Experiment terminated after " << gen << " generations(s)." << endl;
