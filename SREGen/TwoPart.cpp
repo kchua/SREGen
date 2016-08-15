@@ -15,13 +15,13 @@ string TwoPart::key = "c";
 
 bool TwoPart::isMinor = false;
 
+const PianoKey TwoPart::lowerBound = PianoKey("f", 0, 4);
+const PianoKey TwoPart::upperBound = PianoKey("g", 0, 5);
 
 ////////////////////////////
 // Segment static members //
 ////////////////////////////
 
-const PianoKey TwoPart::Segment::lowerBound = PianoKey("f", 0, 4);
-const PianoKey TwoPart::Segment::upperBound = PianoKey("g", 0, 5);
 
 uniform_int_distribution<> TwoPart::Segment::selectorRNG = uniform_int_distribution<>(0, 7);
 uniform_int_distribution<> TwoPart::Segment::octaveRNG = uniform_int_distribution<>(3, 5);
@@ -52,80 +52,88 @@ bool TwoPart::Segment::operator<(const Segment& other) const {
 	return (*this).fitness < other.fitness;
 }
 
+TwoPart TwoPart::generateHarmony() {
+	TwoPart harmony = TwoPart();
+	vector<Note> melody;
+	melody.resize(length);
 
+	for (int i = 0; i < (int) ceil(length / 8.0); i++) {
+		setCurrStart(8 * i);
+		setCurrEnd(min(length, 8 * (i + 1)));
+		do {
+			GA<Segment> segGen(300, 150, 2, 0.9, 0.5);
+			Segment seg = segGen.runSimulation();
+			for (int j = currStart; j < currEnd; j++) {
+				melody[j] = seg.melody[j];
+			}
+		} while (checkCorrectness(melody, 0, currEnd) != 0);
+	}
 
+	harmony.soprano = melody;
+	return harmony;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-void TwoPart::assignFitness(TwoPart& harmony) {
-	harmony.necessaryFitness = 0;
-	harmony.optionalFitness = 0;
-	for (int i = 0; i < length; i++) {
-		PianoKey curr = harmony.bass.getScale().getPianoKey(harmony.melody[i]);
+int TwoPart::checkCorrectness(vector<Note>& melody, int start, int end) {
+	for (int i = start; i < end; i++) {
+		PianoKey curr = bass.getScale().getPianoKey(melody[i]);
 		if (curr > upperBound || curr < lowerBound) {                                                    // Has to stay in range
-			harmony.necessaryFitness -= 1 * (length - i);
-			return;
-		} else if (harmony.melody[i].getScaleNum() == harmony.bass[i].getScaleNum() &&                   // No doubled 7th
-			harmony.melody[i].getScaleNum() == 6) {
-			harmony.necessaryFitness -= 1 * (length - i);
-			return;
-		} else if (i > 0) {
-			Note above = harmony.melody[i - 1];
+			return -1 * (end - i);
+		} else if (melody[i].getScaleNum() == bass[i].getScaleNum() &&                   // No doubled 7th
+			melody[i].getScaleNum() == 6) {
+			return -1 * (end - i);
+		} else if (i > start) {
+			Note above = melody[i - 1];
 			Note below = above;
 			above.setOctave(above.getOctave() + 1);
 			below.setOctave(below.getOctave() - 1);
-			if (below <= harmony.melody[i] && harmony.melody[i] <= above) {
-				int currInterval = harmony.melody[i].getIntervalBetween(harmony.bass[i]);
-				int prevInterval = harmony.melody[i - 1].getIntervalBetween(harmony.bass[i - 1]);
+			if (below <= melody[i] && melody[i] <= above) {
+				int currInterval = melody[i].getIntervalBetween(bass[i]);
+				int prevInterval = melody[i - 1].getIntervalBetween(bass[i - 1]);
 				if (currInterval == prevInterval && (currInterval == 5 || currInterval == 1)) {          // No parallel fifths
-					harmony.necessaryFitness -= 1 * (length - i);
-					return;
-				} else if (harmony.melody[i - 1].getScaleNum() == 6 &&                                   // 7 -> 1
-					       (harmony.melody[i].getScaleNum() != 0 ||
-						    harmony.melody[i - 1].getOctave() != harmony.melody[i].getOctave() - 1)) {
-					harmony.necessaryFitness -= 1 * (length - i);
-					return;
-				} else if (harmony.melody[i - 1].getScaleNum() == 3 &&                                   // 3 -> 4
-						   (harmony.melody[i].getScaleNum() != 2 ||
-							harmony.melody[i - 1].getOctave() != harmony.melody[i].getOctave())) {
-					harmony.necessaryFitness -= 1 * (length - i);
-					return;
-				} else if (i > 1 &&
-					       (harmony.melody[i - 1].getIntervalBetween(harmony.melody[i - 2]) >= 4 ||
-							(harmony.melody[i - 1] == harmony.melody[i - 2] &&
-							 harmony.melody[i - 1].getOctave() != harmony.melody[i - 2].getOctave()))) {
-					Note step = harmony.melody[i - 1];
+					return -1 * (end - i);
+				} else if (melody[i - 1].getScaleNum() == 6 &&                                   // 7 -> 1
+					       (melody[i].getScaleNum() != 0 ||
+						    melody[i - 1].getOctave() != melody[i].getOctave() - 1)) {
+					return -1 * (end - i);
+				} else if (melody[i - 1].getScaleNum() == 3 &&                                   // 3 -> 4
+						   (melody[i].getScaleNum() != 2 ||
+							melody[i - 1].getOctave() != melody[i].getOctave())) {
+					return -1 * (length - i);
+				} else if (i > start + 1 &&
+					       (melody[i - 1].getIntervalBetween(melody[i - 2]) >= 4 ||
+							(melody[i - 1] == melody[i - 2] &&
+							 melody[i - 1].getOctave() != melody[i - 2].getOctave()))) {
+					Note step = melody[i - 1];
 					Note leap = step;
-					if (harmony.melody[i - 1] <= harmony.melody[i - 2]) {
+					if (melody[i - 1] <= melody[i - 2]) {
 						step++;
 						(leap++)++;
 					} else {
 						step--;
 						(leap--)--;
 					}
-					if (!(harmony.melody[i].getScaleNum() == step.getScaleNum() || 
-						  harmony.melody[i].getScaleNum() == leap.getScaleNum())) {             // Leaps greater than a fourth
-						harmony.necessaryFitness -= 1 * (length - i);                            // are followed by a step
-						return;
+					if (!(melody[i].getScaleNum() == step.getScaleNum() || 
+						  melody[i].getScaleNum() == leap.getScaleNum())) {             // Leaps greater than a fourth
+						return -1 * (length - i);                            // are followed by a step
 					}                                                                            // (or a third leap) in the opposite
 				}																		         // direction
 			} else {
-				harmony.necessaryFitness -= 1 * (length - i);                                   // No leaps greater than an octave
-				return;
+				return -1 * (length - i);                                   // No leaps greater than an octave
 			}
 		}
+
 	}
 }
+
+
+
+
+
+
+
+
+
+
 
 void TwoPart::setProgressionStartingChord(Chord chord) {
 	Progression::setStartingChord(chord);
@@ -153,10 +161,6 @@ void TwoPart::createBassLine() {
 	bass = BassLine::generate(length, key, isMinor);
 }
 
-bool TwoPart::operator<(const TwoPart& other) const {
-	return this->necessaryFitness + this->optionalFitness < other.necessaryFitness + other.optionalFitness;
-}
-
 void TwoPart::outputToFile(ofstream& file) {
 	Scale scale = bass.getScale();
 	file << "{\n";
@@ -168,7 +172,7 @@ void TwoPart::outputToFile(ofstream& file) {
 	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? "\\minor\n" : " \\major\n");
 	file << "\t\t\t";
 	for (int i = 0; i < length; i++) {
-		file << scale[melody[i]] << " ";
+		file << scale[soprano[i]] << " ";
 	}
 	file << "\n";
 	file << "\t\t}\n";

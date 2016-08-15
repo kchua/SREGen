@@ -16,7 +16,7 @@ public:
 	TwoPart() = default;
 	TwoPart generateHarmony();
 
-	static int checkCorrectness(const vector<Note>& melody, int start, int end) const;
+	static int checkCorrectness(vector<Note>& melody, int start, int end);
 
 	static void setProgressionStartingChord(Chord chord);
 	static void setEndingCadence(vector<Chord> cadence);
@@ -28,10 +28,17 @@ public:
 	void outputToFile(ofstream& file);
 
 private:
+	vector<Note> soprano;
+
+	static void setCurrStart(int start);
+	static void setCurrEnd(int end);
+
 	static BassLine bass;
 	static int length;
 	static string key;
 	static bool isMinor;
+ 	static const PianoKey lowerBound;
+ 	static const PianoKey upperBound;
 
 	static int currStart;
 	static int currEnd;

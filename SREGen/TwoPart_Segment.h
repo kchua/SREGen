@@ -15,9 +15,6 @@ public:
 	static uniform_int_distribution<> selectorRNG;
 	static uniform_int_distribution<> octaveRNG;
 	static default_random_engine generator;
-private:
- 	static const PianoKey lowerBound;
- 	static const PianoKey upperBound;
 };
 
 #endif 
