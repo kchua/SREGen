@@ -14,7 +14,7 @@ private:
 	friend class GA<Segment>;
 public:
 	TwoPart() = default;
-	TwoPart generateHarmony();
+	static TwoPart generateHarmony();
 
 	static int checkCorrectness(vector<Note>& melody, int start, int end);
 
@@ -30,8 +30,7 @@ public:
 private:
 	vector<Note> soprano;
 
-	static void setCurrStart(int start);
-	static void setCurrEnd(int end);
+	static void setCurrBounds(int start, int end);
 
 	static BassLine bass;
 	static int length;
@@ -42,6 +41,10 @@ private:
 
 	static int currStart;
 	static int currEnd;
+
+	static uniform_int_distribution<> selectorRNG;
+	static uniform_int_distribution<> octaveRNG;
+	static default_random_engine generator;
 };
 
 #endif

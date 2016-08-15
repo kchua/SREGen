@@ -5,6 +5,7 @@
    chromosome. */
 class Note {
 public:
+	Note() = default;
 	Note(int scaleNum, int octave, int duration, int accidental = 0);
 	Note(int scaleNum, int accidental = 0);
 

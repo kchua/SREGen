@@ -12,9 +12,6 @@ public:
 	int fitness;
 
 	vector<Note> melody;
-	static uniform_int_distribution<> selectorRNG;
-	static uniform_int_distribution<> octaveRNG;
-	static default_random_engine generator;
 };
 
 #endif 

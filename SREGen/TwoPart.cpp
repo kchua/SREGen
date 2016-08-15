@@ -7,6 +7,9 @@
 // TwoPart static members //
 ////////////////////////////
 
+int TwoPart::currStart = 0;
+int TwoPart::currEnd = 0;
+
 BassLine TwoPart::bass = BassLine();
 
 int TwoPart::length = 8;
@@ -18,14 +21,9 @@ bool TwoPart::isMinor = false;
 const PianoKey TwoPart::lowerBound = PianoKey("f", 0, 4);
 const PianoKey TwoPart::upperBound = PianoKey("g", 0, 5);
 
-////////////////////////////
-// Segment static members //
-////////////////////////////
-
-
-uniform_int_distribution<> TwoPart::Segment::selectorRNG = uniform_int_distribution<>(0, 7);
-uniform_int_distribution<> TwoPart::Segment::octaveRNG = uniform_int_distribution<>(3, 5);
-default_random_engine TwoPart::Segment::generator =
+uniform_int_distribution<> TwoPart::selectorRNG = uniform_int_distribution<>(0, 7);
+uniform_int_distribution<> TwoPart::octaveRNG = uniform_int_distribution<>(3, 5);
+default_random_engine TwoPart::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
 
 
@@ -52,14 +50,18 @@ bool TwoPart::Segment::operator<(const Segment& other) const {
 	return (*this).fitness < other.fitness;
 }
 
+
+/////////////////////
+// TwoPart methods //
+/////////////////////
+
 TwoPart TwoPart::generateHarmony() {
 	TwoPart harmony = TwoPart();
 	vector<Note> melody;
 	melody.resize(length);
 
 	for (int i = 0; i < (int) ceil(length / 8.0); i++) {
-		setCurrStart(8 * i);
-		setCurrEnd(min(length, 8 * (i + 1)));
+		setCurrBounds(8 * i, min(length, 8 * (i + 1)));
 		do {
 			GA<Segment> segGen(300, 150, 2, 0.9, 0.5);
 			Segment seg = segGen.runSimulation();
@@ -121,44 +123,8 @@ int TwoPart::checkCorrectness(vector<Note>& melody, int start, int end) {
 				return -1 * (length - i);                                   // No leaps greater than an octave
 			}
 		}
-
 	}
-}
-
-
-
-
-
-
-
-
-
-
-
-void TwoPart::setProgressionStartingChord(Chord chord) {
-	Progression::setStartingChord(chord);
-}
-
-void TwoPart::setEndingCadence(vector<Chord> cadence) {
-	Progression::setEndingCadence(cadence);
-}
-
-void TwoPart::setLength(int len) {
-	length = len;
-}
-
-void TwoPart::setKey(string key) {
-	TwoPart::key = key;
-}
-
-void TwoPart::setTonality(bool isMinor) {
-	TwoPart::isMinor = isMinor;
-}
-
-/* Generates the bassline upon which the melody would be based. 
-   Warning: must be called before starting the genetic algorithm! */
-void TwoPart::createBassLine() {
-	bass = BassLine::generate(length, key, isMinor);
+	return 0;
 }
 
 void TwoPart::outputToFile(ofstream& file) {
@@ -194,13 +160,51 @@ void TwoPart::outputToFile(ofstream& file) {
 	bass.getProgression().outputRomanNumerals();
 }
 
+
+////////////////////////////
+// TwoPart Static Methods //
+////////////////////////////
+
+void TwoPart::setProgressionStartingChord(Chord chord) {
+	Progression::setStartingChord(chord);
+}
+
+void TwoPart::setEndingCadence(vector<Chord> cadence) {
+	Progression::setEndingCadence(cadence);
+}
+
+void TwoPart::setLength(int len) {
+	length = len;
+}
+
+void TwoPart::setKey(string key) {
+	TwoPart::key = key;
+}
+
+void TwoPart::setTonality(bool isMinor) {
+	TwoPart::isMinor = isMinor;
+}
+
+/* Generates the bassline upon which the melody would be based. 
+   Warning: must be called before starting the genetic algorithm! */
+void TwoPart::createBassLine() {
+	bass = BassLine::generate(length, key, isMinor);
+}
+
+void TwoPart::setCurrBounds(int start, int end) {
+	currStart = start;
+	currEnd = end;
+	selectorRNG = uniform_int_distribution<>(start, end - 1);
+}
+
+
 ///////////////////////////////
 // GA method specializations //
 ///////////////////////////////
 
 
 template<>
-pair<TwoPart, TwoPart> GA<TwoPart>::crossover(TwoPart parent1, TwoPart parent2) {
+pair<TwoPart::Segment, TwoPart::Segment> GA<TwoPart::Segment>::crossover(TwoPart::Segment parent1, TwoPart::Segment parent2) {
 	if (rateRNG(generator) <= crossoverRate) {
 		int index = TwoPart::selectorRNG(TwoPart::generator);
 		for (int i = index; i < TwoPart::length; i++) {
@@ -218,17 +222,17 @@ pair<TwoPart, TwoPart> GA<TwoPart>::crossover(TwoPart parent1, TwoPart parent2) 
 		}
 	}
 	*/
-	return pair<TwoPart, TwoPart>(parent1, parent2);
+	return pair<TwoPart::Segment, TwoPart::Segment>(parent1, parent2);
 }
 
 
 template<>
-void GA<TwoPart>::mutate(TwoPart& child) {
+void GA<TwoPart::Segment>::mutate(TwoPart::Segment& child) {
 	if (rateRNG(generator) <= mutationRate) {
 		int index = TwoPart::selectorRNG(TwoPart::generator);
 		if (rateRNG(generator) <= 0.25) {
 			int prevOctave = child.melody[index].getOctave();
-			child.melody[index] = child.bass.getProgression().at(index).getRandomNote();
+			child.melody[index] = TwoPart::bass.getProgression().at(index).getRandomNote();
 			child.melody[index].setOctave(prevOctave);
 		} else {
 			child.melody[index].setOctave(TwoPart::octaveRNG(TwoPart::generator));
@@ -237,29 +241,23 @@ void GA<TwoPart>::mutate(TwoPart& child) {
 }
 
 template<>
-bool GA<TwoPart>::canTerminate() {
-	return organisms[0].necessaryFitness == 0;
+bool GA<TwoPart::Segment>::canTerminate() {
+	return organisms[0].fitness == 0;
 }
 
 template<>
-TwoPart& GA<TwoPart>::modifySolution(TwoPart& bestFit) {
+TwoPart::Segment& GA<TwoPart::Segment>::modifySolution(TwoPart::Segment& bestFit) {
 	return bestFit;
 }
 
-template<>
-void GA<TwoPart::Segment>::mutate(TwoPart::Segment& child) {
-
-}
-
 int main() {
-	TwoPart::setLength(8);
-	TwoPart::setKey("bes");
-	TwoPart::setTonality(false);
-	TwoPart::setProgressionStartingChord(Chord("I", Note(0), Note(2), Note(4)));
-	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6), Note(1)), Chord("I", Note(0), Note(2), Note(4)) });
+	TwoPart::setLength(11);
+	TwoPart::setKey("c");
+	TwoPart::setTonality(true);
+	TwoPart::setProgressionStartingChord(Chord("i", Note(0), Note(2), Note(4)));
+	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6, 1), Note(1)), Chord("i", Note(0), Note(2), Note(4)) });
 	TwoPart::createBassLine();
-	GA<TwoPart> test(300, 150, 2, 0.9, 0.5);
-	TwoPart result = test.runSimulation();
+	TwoPart result = TwoPart::generateHarmony();
 	ofstream output;
 	output.open("twopart.ly");
 	result.outputToFile(output);
