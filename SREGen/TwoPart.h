@@ -16,7 +16,7 @@ public:
 	TwoPart() = default;
 	TwoPart generateHarmony();
 
-	int checkCorrectness(const vector<Note>& melody, int start, int end) const;
+	static int checkCorrectness(const vector<Note>& melody, int start, int end) const;
 
 	static void setProgressionStartingChord(Chord chord);
 	static void setEndingCadence(vector<Chord> cadence);
@@ -32,6 +32,9 @@ private:
 	static int length;
 	static string key;
 	static bool isMinor;
+
+	static int currStart;
+	static int currEnd;
 };
 
 #endif

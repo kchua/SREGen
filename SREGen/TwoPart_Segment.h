@@ -5,12 +5,11 @@
 
 class TwoPart::Segment {
 public:
-	static TwoPart generateRandom();
-	static void assignFitness(TwoPart& harmony);
-	bool operator<(const TwoPart& other) const;
+	static Segment generateRandom();
+	static void assignFitness(Segment& seg);
+	bool operator<(const Segment& other) const;
 
-	int necessaryFitness;
-	int optionalFitness;
+	int fitness;
 
 	vector<Note> melody;
 	static uniform_int_distribution<> selectorRNG;

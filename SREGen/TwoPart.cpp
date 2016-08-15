@@ -2,6 +2,11 @@
 #include "TwoPart_Segment.h"
 #include "GA.h"
 
+
+////////////////////////////
+// TwoPart static members //
+////////////////////////////
+
 BassLine TwoPart::bass = BassLine();
 
 int TwoPart::length = 8;
@@ -10,24 +15,57 @@ string TwoPart::key = "c";
 
 bool TwoPart::isMinor = false;
 
-const PianoKey TwoPart::lowerBound = PianoKey("f", 0, 4);
-const PianoKey TwoPart::upperBound = PianoKey("g", 0, 5);
 
-uniform_int_distribution<> TwoPart::selectorRNG = uniform_int_distribution<>(0, 7);
-uniform_int_distribution<> TwoPart::octaveRNG = uniform_int_distribution<>(3, 5);
-default_random_engine TwoPart::generator =
+////////////////////////////
+// Segment static members //
+////////////////////////////
+
+const PianoKey TwoPart::Segment::lowerBound = PianoKey("f", 0, 4);
+const PianoKey TwoPart::Segment::upperBound = PianoKey("g", 0, 5);
+
+uniform_int_distribution<> TwoPart::Segment::selectorRNG = uniform_int_distribution<>(0, 7);
+uniform_int_distribution<> TwoPart::Segment::octaveRNG = uniform_int_distribution<>(3, 5);
+default_random_engine TwoPart::Segment::generator =
 	default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+
+
+/////////////////////
+// Segment methods //
+/////////////////////
 
 /* Generates a random melody for a bass line.
    WARNING: must call createBassLine method before calling this function! */
-TwoPart TwoPart::generateRandom() {
-	TwoPart harmony = TwoPart();
+TwoPart::Segment TwoPart::Segment::generateRandom() {
+	Segment harmony = Segment();
 	for (int i = 0; i < length; i++) {
-		harmony.melody.push_back(harmony.bass.getProgression().at(i).getRandomNote());
+		harmony.melody.push_back(TwoPart::bass.getProgression().at(i).getRandomNote());
 		harmony.melody[i].setOctave(octaveRNG(generator));
 	}
 	return harmony;
 }
+
+void TwoPart::Segment::assignFitness(TwoPart::Segment& seg) {
+	seg.fitness = checkCorrectness(seg.melody, currStart, currEnd);
+}
+
+bool TwoPart::Segment::operator<(const Segment& other) const {
+	return (*this).fitness < other.fitness;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void TwoPart::assignFitness(TwoPart& harmony) {
 	harmony.necessaryFitness = 0;
