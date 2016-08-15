@@ -59,10 +59,28 @@ TwoPart TwoPart::generateHarmony() {
 	TwoPart harmony = TwoPart();
 	vector<Note> melody;
 	melody.resize(length);
+	int returnsToStart = 0;
 
 	for (int i = 0; i < (int) ceil(length / 8.0); i++) {
 		setCurrBounds(8 * i, min(length, 8 * (i + 1)));
+		int attempts = 0;
 		do {
+			attempts++;
+			if (attempts > 10) {
+				if (i != 0) {
+					cout << "Exceeded attempt limit. Regenerating previous segment." << endl;
+					i -= 2;
+					if (i == -1) {
+						returnsToStart++;
+					}
+					if (returnsToStart > 3) {
+						createBassLine();
+						returnsToStart = 0;
+					}
+					break;
+				}
+			}
+			cout << "Generating melody segment " << i + 1 << ", attempt " << attempts << "... ";
 			GA<Segment> segGen(300, 150, 2, 0.9, 0.5);
 			Segment seg = segGen.runSimulation();
 			for (int j = currStart; j < currEnd; j++) {
@@ -251,10 +269,10 @@ TwoPart::Segment& GA<TwoPart::Segment>::modifySolution(TwoPart::Segment& bestFit
 }
 
 int main() {
-	TwoPart::setLength(11);
-	TwoPart::setKey("c");
+	TwoPart::setLength(12);
+	TwoPart::setKey("d");
 	TwoPart::setTonality(true);
-	TwoPart::setProgressionStartingChord(Chord("i", Note(0), Note(2), Note(4)));
+	TwoPart::setProgressionStartingChord(Chord("ii0", Note(1), Note(3), Note(5)));
 	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6, 1), Note(1)), Chord("i", Note(0), Note(2), Note(4)) });
 	TwoPart::createBassLine();
 	TwoPart result = TwoPart::generateHarmony();

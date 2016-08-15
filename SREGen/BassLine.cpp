@@ -19,6 +19,7 @@ BassLine BassLine::generate(int length, string key, bool isMinor) {
 	Progression::setProgressionLength(length);
 	Progression::setMode(isMinor);
 	GA<Progression> generator = GA<Progression>(300, 40, 40, 0.5, 0.05);
+	cout << "Generating chord progression for bass line... ";
 	BassLine b = BassLine(key, isMinor, generator.runSimulation(), length);
 	return b;
 }

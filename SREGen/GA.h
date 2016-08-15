@@ -45,7 +45,7 @@ public:
 		int gen = 0;
 		double mRate = mutationRate;
 		while (!canTerminate()) {
-			cout << gen++ << " ";
+			gen++;
 			vector<Organism> children;
 			children.resize(childCount);
 
