@@ -55,6 +55,43 @@ bool TwoPart::Segment::operator<(const Segment& other) const {
 // TwoPart methods //
 /////////////////////
 
+void TwoPart::outputToFile(ofstream& file) {
+	Scale scale = bass.getScale();
+	file << "{\n";
+	file << "\t<<\n";
+
+	file << "\t\t\\new Staff {\n";
+	file << "\t\t\t\\time 4/4\n";
+	file << "\t\t\t\\clef treble\n";
+	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? " \\minor\n" : " \\major\n");
+	file << "\t\t\t";
+	for (int i = 0; i < length; i++) {
+		file << scale[soprano[i]] << " ";
+	}
+	file << "\n";
+	file << "\t\t}\n";
+
+
+	file << "\t\t\\new Staff {\n";
+	file << "\t\t\t\\clef bass\n";
+	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? " \\minor\n" : " \\major\n");
+	file << "\t\t\t";
+	for (int i = 0; i < length; i++) {
+		file << scale[bass[i]] << " ";
+	}
+	file << "\n";
+	file << "\t\t}\n";
+
+	file << "\t>>\n";
+	file << "}";
+	file.close();
+	bass.getProgression().outputRomanNumerals();
+}
+
+////////////////////////////
+// TwoPart Static Methods //
+////////////////////////////
+
 TwoPart TwoPart::generateHarmony() {
 	TwoPart harmony = TwoPart();
 	vector<Note> melody;
@@ -97,92 +134,31 @@ TwoPart TwoPart::generateHarmony() {
 int TwoPart::checkCorrectness(vector<Note>& melody, int start, int end) {
 	for (int i = start; i < end; i++) {
 		PianoKey curr = bass.getScale().getPianoKey(melody[i]);
-		if (curr > upperBound || curr < lowerBound) {                                                    // Has to stay in range
+		if (!pianoKeyInBounds(curr)) {                                                    // Has to stay in range
 			return -1 * (end - i);
-		} else if (melody[i].getScaleNum() == bass[i].getScaleNum() &&                   // No doubled 7th
-			melody[i].getScaleNum() == 6) {
+		} else if (doubledSeventh(melody, i)) {
 			return -1 * (end - i);
 		} else if (i > start) {
-			Note above = melody[i - 1];
-			Note below = above;
-			above.setOctave(above.getOctave() + 1);
-			below.setOctave(below.getOctave() - 1);
-			if (below <= melody[i] && melody[i] <= above) {
-				int currInterval = melody[i].getIntervalBetween(bass[i]);
-				int prevInterval = melody[i - 1].getIntervalBetween(bass[i - 1]);
-				if (currInterval == prevInterval && (currInterval == 5 || currInterval == 1)) {          // No parallel fifths
+			if (withinOctaveOfPrev(melody, i)) {
+				if (hasSeventhLeap(melody, i)) {
 					return -1 * (end - i);
-				} else if (melody[i - 1].getScaleNum() == 6 &&                                   // 7 -> 1
-					       (melody[i].getScaleNum() != 0 ||
-						    melody[i - 1].getOctave() != melody[i].getOctave() - 1)) {
+				} else if (hasBadParallels(melody, i)) {
 					return -1 * (end - i);
-				} else if (melody[i - 1].getScaleNum() == 3 &&                                   // 3 -> 4
-						   (melody[i].getScaleNum() != 2 ||
-							melody[i - 1].getOctave() != melody[i].getOctave())) {
-					return -1 * (length - i);
+				} else if (!ifSeventhResToTonic(melody, i)) {
+					return -1 * (end - i);
+				} else if (!ifFourResToThree(melody, i)) {
+					return -1 * (end - i);
 				} else if (i > start + 1 &&
-					       (melody[i - 1].getIntervalBetween(melody[i - 2]) >= 4 ||
-							(melody[i - 1] == melody[i - 2] &&
-							 melody[i - 1].getOctave() != melody[i - 2].getOctave()))) {
-					Note step = melody[i - 1];
-					Note leap = step;
-					if (melody[i - 1] <= melody[i - 2]) {
-						step++;
-						(leap++)++;
-					} else {
-						step--;
-						(leap--)--;
-					}
-					if (!(melody[i].getScaleNum() == step.getScaleNum() || 
-						  melody[i].getScaleNum() == leap.getScaleNum())) {             // Leaps greater than a fourth
-						return -1 * (length - i);                            // are followed by a step
-					}                                                                            // (or a third leap) in the opposite
-				}																		         // direction
+					       !ifLeapHasValidRes(melody, i)) {
+					return -1 * (end - i);
+				}
 			} else {
-				return -1 * (length - i);                                   // No leaps greater than an octave
+				return -1 * (end - i);
 			}
 		}
 	}
 	return 0;
 }
-
-void TwoPart::outputToFile(ofstream& file) {
-	Scale scale = bass.getScale();
-	file << "{\n";
-	file << "\t<<\n";
-
-	file << "\t\t\\new Staff {\n";
-	file << "\t\t\t\\time 4/4\n";
-	file << "\t\t\t\\clef treble\n";
-	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? "\\minor\n" : " \\major\n");
-	file << "\t\t\t";
-	for (int i = 0; i < length; i++) {
-		file << scale[soprano[i]] << " ";
-	}
-	file << "\n";
-	file << "\t\t}\n";
-
-
-	file << "\t\t\\new Staff {\n";
-	file << "\t\t\t\\clef bass\n";
-	file << "\t\t\t\\key " << TwoPart::key << ((isMinor) ? "\\minor\n" : " \\major\n");
-	file << "\t\t\t";
-	for (int i = 0; i < length; i++) {
-		file << scale[bass[i]] << " ";
-	}
-	file << "\n";
-	file << "\t\t}\n";
-
-	file << "\t>>";
-	file << "}";
-	file.close();
-	bass.getProgression().outputRomanNumerals();
-}
-
-
-////////////////////////////
-// TwoPart Static Methods //
-////////////////////////////
 
 void TwoPart::setProgressionStartingChord(Chord chord) {
 	Progression::setStartingChord(chord);
@@ -210,17 +186,114 @@ void TwoPart::createBassLine() {
 	bass = BassLine::generate(length, key, isMinor);
 }
 
+////////////////////////////
+// Private static methods //
+////////////////////////////
+
+/* Changes which part of the melody is being looked at for segment generation. */
 void TwoPart::setCurrBounds(int start, int end) {
 	currStart = start;
 	currEnd = end;
 	selectorRNG = uniform_int_distribution<>(start, end - 1);
 }
 
+/* Returns true if a key is in the common range for a soprano voice. */
+bool TwoPart::pianoKeyInBounds(PianoKey key) {
+	return !(key > upperBound || key < lowerBound);
+}
 
-///////////////////////////////
-// GA method specializations //
-///////////////////////////////
+/* Returns true if there is a doubled seventh. */
+bool TwoPart::doubledSeventh(vector<Note>& melody, int index) {
+	return (melody[index].getScaleNum() == bass[index].getScaleNum() &&
+			melody[index].getScaleNum() == 6 && 
+			melody[index].getAccidental() == (isMinor) ? 1 : 0);
+}
 
+/* Returns true if a note at the given index is within an octave of the previous note. */
+bool TwoPart::withinOctaveOfPrev(vector<Note>& melody, int index) {
+	Note above = melody[index - 1];
+	Note below = above;
+	above.setOctave(above.getOctave() + 1);
+	below.setOctave(below.getOctave() - 1);
+	return below <= melody[index] && melody[index] <= above;
+}
+
+/* Returns true if there is a seventh leap between the note at the given index and
+   the note before it. */
+bool TwoPart::hasSeventhLeap(vector<Note>& melody, int index) {
+	if (melody[index - 1].getIntervalBetween(melody[index]) == 7) {
+		return true;
+	}
+	return false;
+}
+
+/* Returns true if there are parallel octaves or fifths between the chord voicing at
+   the current index and the next. */
+bool TwoPart::hasBadParallels(vector<Note>& melody, int index) {
+	int currInterval = melody[index].getIntervalBetween(bass[index]);
+	int prevInterval = melody[index - 1].getIntervalBetween(bass[index - 1]);
+	return currInterval == prevInterval && (currInterval == 5 || currInterval == 1);
+}
+
+/* 
+	Returns the truth value of the implication
+									
+      Note before index is a fourth ==> Note before index resolved down to the third.
+*/
+bool TwoPart::ifFourResToThree(vector<Note>& melody, int index) {
+	if (melody[index - 1].getScaleNum() == 3) {
+		if (melody[index].getScaleNum() != 2 ||
+			melody[index - 1].getOctave() != melody[index].getOctave()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/* 
+	Return the truth value of the implication
+
+	  Note before index is the subtonic ==> Note before index resolved up to the tonic.
+*/
+bool TwoPart::ifSeventhResToTonic(vector<Note>& melody, int index) {
+	if (melody[index - 1].getScaleNum() == 6 &&
+		melody[index - 1].getAccidental() == (isMinor) ? 1 : 0) {
+		if (melody[index].getScaleNum() != 0 ||
+			melody[index - 1].getOctave() != melody[index].getOctave() - 1) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/*
+	Returns the truth value of the implication
+
+	  Previous interval is a leap of at least a fourth
+									    ==>
+		                                 Resolved in a step in the opposite direction.
+*/
+bool TwoPart::ifLeapHasValidRes(vector<Note>& melody, int index) {
+	if (melody[index - 1].getIntervalBetween(melody[index - 2]) >= 4 ||
+		(melody[index - 1] == melody[index - 2] &&
+			melody[index - 1].getOctave() != melody[index - 2].getOctave())) {
+		Note step = melody[index - 1];
+		if (melody[index - 1] <= melody[index - 2]) {
+			step++;
+		} else {
+			step--;
+		}
+		if (melody[index].getScaleNum() != step.getScaleNum() ||
+			melody[index].getOctave() != step.getOctave()) {
+			return false;
+		}
+	}
+	return true;
+}
+
+///////////////////////////////////////
+// Segment GA method specializations //
+///////////////////////////////////////
 
 template<>
 pair<TwoPart::Segment, TwoPart::Segment> GA<TwoPart::Segment>::crossover(TwoPart::Segment parent1, TwoPart::Segment parent2) {
@@ -271,10 +344,10 @@ TwoPart::Segment& GA<TwoPart::Segment>::modifySolution(TwoPart::Segment& bestFit
 
 int main() {
 	TwoPart::setLength(12);
-	TwoPart::setKey("e");
-	TwoPart::setTonality(true);
-	TwoPart::setProgressionStartingChord(Chord("VI", Note(5), Note(0), Note(2)));
-	TwoPart::setEndingCadence({ Chord("ii0", Note(1), Note(3), Note(5)), Chord("V", Note(4), Note(6, 1), Note(1)) });
+	TwoPart::setKey("bes");
+	TwoPart::setTonality(false);
+	TwoPart::setProgressionStartingChord(Chord("I", Note(0), Note(2), Note(4)));
+	TwoPart::setEndingCadence({ Chord("V", Note(4), Note(6), Note(1)) });
 	TwoPart::createBassLine();
 	TwoPart result = TwoPart::generateHarmony();
 	ofstream output;

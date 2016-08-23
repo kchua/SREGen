@@ -42,6 +42,15 @@ private:
 	static int currStart;
 	static int currEnd;
 
+	static bool pianoKeyInBounds(PianoKey key);
+	static bool doubledSeventh(vector<Note>& melody, int index);
+	static bool withinOctaveOfPrev(vector<Note>& melody, int index);
+	static bool hasSeventhLeap(vector<Note>& melody, int index);
+	static bool hasBadParallels(vector<Note>& melody, int index);
+	static bool ifFourResToThree(vector<Note>& melody, int index);
+	static bool ifSeventhResToTonic(vector<Note>& melody, int index);
+	static bool ifLeapHasValidRes(vector<Note>& melody, int index);
+
 	static uniform_int_distribution<> selectorRNG;
 	static uniform_int_distribution<> octaveRNG;
 	static default_random_engine generator;

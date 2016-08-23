@@ -111,7 +111,10 @@
       <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
     <ClInclude Include="TwoPart_Segment.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>
