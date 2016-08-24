@@ -121,6 +121,7 @@
     <ClCompile Include="ProgressionGraph.cpp" />
     <ClCompile Include="Scale.cpp" />
     <ClCompile Include="ScaleGenerator.cpp" />
+    <ClCompile Include="SREGen.cpp" />
     <ClCompile Include="TwoPart.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,11 +136,9 @@
     <ClInclude Include="Progression.h" />
     <ClInclude Include="Scale.h" />
     <ClInclude Include="ScaleGenerator.h" />
+    <ClInclude Include="SREGen.h" />
     <ClInclude Include="TwoPart.h" />
     <ClInclude Include="TwoPart_Segment.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

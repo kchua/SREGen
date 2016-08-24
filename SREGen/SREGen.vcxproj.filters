@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Genetic Algorithms">
       <UniqueIdentifier>{5ecc0380-d39e-47ba-937b-683a01ddd303}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Main">
+      <UniqueIdentifier>{f840a441-91fd-438a-812c-e1da78dbc2ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Main">
+      <UniqueIdentifier>{5b8759a7-32d6-427a-859b-7956d3574b2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Note.cpp">
@@ -71,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="TwoPart.cpp">
       <Filter>Source Files\Genetic Algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="SREGen.cpp">
+      <Filter>Source Files\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,8 +122,8 @@
     <ClInclude Include="TwoPart_Segment.h">
       <Filter>Header Files\Genetic Algorithms</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClInclude Include="SREGen.h">
+      <Filter>Header Files\Main</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
