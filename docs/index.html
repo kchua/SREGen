@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SREGen Project Site</title>
+    <link rel="stylesheet" type="text/css" href="assets/stylesheets/style.css">
+  </head>
+  <body>
+    <div class="main">
+      <header id="header">
+        <div class="title"><h1>SREGen</h1></div>
+        <div class="buttons">
+          <button class="navbutton" id="introButton">Introduction</button>
+          <button class="navbutton" id="instructButton">Instructions</button>
+          <button class="navbutton" id="samplesButton">Samples</button>
+          <button class="github navbutton" onclick="location.href='http://github.com/kchua/SREGen'">
+            View on Github
+            <div class="github logo">
+              <img src="assets/img/GitHub-Mark-32px.png" />
+            </div>
+          </button>
+        </div>
+      </header>
+      <div class="splash panel">
+        <div class="projname">
+          <h1 id="name">Sight-Reading Exercise Generator</h1>
+          <h3 id="desc">
+            A program which generates short musical passages with the aid of
+            genetic algorithms.
+          </h3>
+        </div>
+        <div id="down">
+          <img src="assets/img/down.png" />
+          <div id="arrowhead"></div>
+        </div>
+      </div>
+      <div class="intro panel">
+        <h1>A Brief Introduction Through Questions/Comments</h1>
+        <div class="question">
+          <h2>What does it do?</h2>
+          <p>
+            Sight-Reading Exercise Generator is a program that is intended to generate short musical
+            passages intended to hone a pianist's sight-reading abilities. However, in the process of
+            developing such functionality, the project has acquired multiple generators, including
+            a chord progression generator, bass line generator, two-part harmony generator, and so on.
+          </p>
+          <p>
+            As it is still a project in progress, the exercise generator is still in the works; however,
+            the generators that have been or will be created along the way will be made available as
+            they are finished.
+          </p>
+        </div>
+        <div class="question">
+          <h2>How does it work?</h2>
+          <p>
+            A genetic algorithm is a technique based on the idea of evolution in biology. In order to solve
+            a problem, a genetic algorithm first randomly generates a starting "population" of solutions.
+            Then, it generates 2N organisms (where N is decided on by the programmer) by choosing N pairs
+            of organisms randomly from the current pool. In choosing parent solutions, the algorithm applies
+            selection pressure by favoring "better" solutions (as determined by some pre-defined fitness
+            function) in choosing parents. For each pair, the algorithm exchanges parts of the solution
+            (crossover) or randomly changes some part of the solution (mutation), giving rise to new
+            offspring solutions. The new solutions are then introduced into the old population and the
+            process continues until the "best-fit" organism out of the entire population satisfies some
+            pre-determined termination condition.
+          </p>
+          <p>
+            Genetic algorithms are particularly well-suited for this problem since one can treat a musical score
+            as something like biological DNA - just like how DNA has four base pairs, we can treat a note on
+            each beat of the score as a sort of genetic "building-block." Such a treatment of musical scores
+            lends itself easily to the operations of crossover (where one exchanges portions of the music
+            between two different scores), or mutation (where one can randomly change a note in the score).
+            Furthermore, if one restricts the genetic algorithm to generating music based on Baroque
+            music theory, one can easily write a fitness function for the genetic algorithm since Baroque
+            music theory is rigid and easily encoded yet at the same time, guarantees pieces that sound
+            musical.
+          </p>
+          <p>
+            Therefore, I had to encode the ideas of music theory into classes and
+            data structures which represent notes, chords, progressions, and so on, and use these
+            abstractions to implement fitness functions that allow a genetic algorithm to determine
+            what segments of music "flow" well together and sound musical.
+          </p>
+        </div>
+        <div class="question">
+          <h2>How did you even come up with a project like this?</h2>
+          <p>
+            I had just finished playing around with one of my gists where I made a genetic algorithm
+            that learns how to print "Hello World" by only knowing how many letters are wrong in a
+            solution. Looking back, the program was extremely circular, but it was nevertheless
+            mind-blowing because it generated the phrase from pure pseudorandomness - I was excited
+            to make another project with genetic algorithms, but I did not know what to make with it.
+          </p>
+          <p>
+            So then, I was just playing piano, having the usual horrible time trying to learn how to
+            sight-read sheet music, when I suddenly had the epiphany of making an exercise generator
+            using a genetic algorithm. All has gone downhill since then.
+          </p>
+        </div>
+        <div class="question">
+          <h2>
+            What if I am not musically inclined/do not know how to play the piano and
+            I just want to hear what it generates?
+          </h2>
+          <p>
+            See samples below.
+          </p>
+        </div>
+        <div class="question">
+          <h2>I don't like this project.</h2>
+          <p>
+            Okay. :(
+          </p>
+        </div>
+      </div>
+      <div class="instructions panel">
+        <h1>Instructions</h1>
+        <em>
+          Note: SREGen produces .ly files, which can only be compiled using the free Lilypond program
+          (program information and installer can be downloaded <a href="http://lilypond.org">here</a>).
+        </em><br>
+        <em>Instructions coming soon!</em>
+      </div>
+      <div class="samples panel">
+        <h1>Samples</h1>
+          <em>Samples coming soon!</em>
+      </div>
+    </div>
+  </body>
+  <script src="assets/scripts/down.js"></script>
+  <script src="assets/scripts/scroll.js"></script>
+</html>
