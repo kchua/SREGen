@@ -4,7 +4,7 @@
 #include <string>
 #include "Note.h"
 #include "Scale.h"
-#include "Chord.h"
+#include "Progression.h"
 
 using namespace std;
 
@@ -15,9 +15,9 @@ void SREGen::generate(int argc, char * argv[]) {
 	} else if (mode == "progression") {
 		generateProgression(argc, argv);
 	} else if (mode == "bass") {
-		generateBassLine(argc, argv);
+		//generateBassLine(argc, argv);
 	} else if (mode == "twopartharm") {
-		generateTwoPartHarmony(argc, argv);
+		//generateTwoPartHarmony(argc, argv);
 	} else {
 		cout << "Error. Mode argument invalid. Please try again." << endl;
 		cout << "Exiting..." << endl;
@@ -89,5 +89,38 @@ void SREGen::generateProgression(int argc, char* argv[]) {
 		cout << "Example usage (Minor progression of length 10 starting with the tonic, and ending with a plagal cadence: SREGen progression -t minor -l 10 -scd 1 -ec plagal";
 		exit(-1);
 	}
-	// TODO Make a chord of the chord degree (will probably make a helper function)
+	Progression::setStartingChord(generateChord(startChordDegree, (tonality == "minor"), false));
+	Progression::setProgressionLength(length);
+	Progression::setMode(tonality == "minor");
+	if (endingCadence == "authentic") {
+		Progression::setEndingCadence({ generateChord(4, (tonality == "minor"), false), generateChord(0, (tonality == "minor"), false) });
+	}
+
+	Progression generated = (GA<Progression>(300, 40, 40, 0.5, 0.05)).runSimulation();
+
+	ofstream progressionFile;
+	progressionFile.open("progression.txt");
+	progressionFile << generated.outputRomanNumerals();
+	progressionFile.close();
+}
+
+Chord SREGen::generateChord(int degree, bool isMinor, bool isSeventh) {
+	Note bottom = Note(degree);
+	Note middle = Note((degree + 2) % 7);
+	Note top = Note((degree + 4) % 7);
+	if (isMinor) {
+		if ((degree + 2) % 7 == 6) {
+			middle = Note(6, 1);
+		} else if (degree == 6) {
+			bottom = Note(degree, 1);
+		}
+	}
+	return Chord((isMinor) ? minorScaleChordNames[degree] : majorScaleChordNames[degree], bottom, middle, top);
+}
+
+const vector<string> SREGen::majorScaleChordNames = vector<string>({ "I", "ii", "iii", "IV", "V", "vi", "vii0" });
+const vector<string> SREGen::minorScaleChordNames = vector<string>({ "i", "ii0", "III", "iv", "V", "VI", "vii0" });
+
+int main(int argc, char* argv[]) {
+	SREGen::generate(argc, argv);
 }

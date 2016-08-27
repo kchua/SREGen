@@ -342,6 +342,7 @@ TwoPart::Segment& GA<TwoPart::Segment>::modifySolution(TwoPart::Segment& bestFit
 	return bestFit;
 }
 
+/*
 int main() {
 	TwoPart::setLength(12);
 	TwoPart::setKey("bes");
@@ -354,3 +355,4 @@ int main() {
 	output.open("twopart.ly");
 	result.outputToFile(output);
 }
+*/

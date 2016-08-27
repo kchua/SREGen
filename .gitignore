@@ -245,3 +245,7 @@ ModelManifest.xml
 .fake/
 
 *.pdf
+/SREGen/twopart.ly
+/SREGen/twopart-2.ly
+/SREGen/bassline.ly
+/SREGen/progression.txt
