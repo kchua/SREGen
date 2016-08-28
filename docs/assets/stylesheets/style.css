@@ -78,6 +78,14 @@ a, a:visited, a:hover, a:active {
 em {
 	font-style: italic;
 }
+sub {
+    vertical-align: sub;
+    font-size: smaller;
+}
+sup {
+    vertical-align: super;
+    font-size: smaller;
+}
 
 #name {
 	font-size: 3em;
@@ -116,6 +124,10 @@ header .title {
 	margin-left: 25px;
 	vertical-align: middle;
 	cursor: pointer;
+	transition: color 1s;
+}
+header .title:hover {
+	color: #cca300;
 }
 header .buttons {
 	margin-right: 10px;
@@ -166,6 +178,8 @@ header .buttons button.github .github.logo img {
 .main {
 	background-image: url("../img/SREGen-background.jpg");
 	background-attachment: fixed;
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 
 .panel {
@@ -245,4 +259,52 @@ header .buttons button.github .github.logo img {
 }
 #down:hover #arrowhead {
 	border-top-color: #2c7d4f;
+}
+
+.program {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+.program h2 {
+	margin-bottom: 5px;
+	border-bottom: 1px solid #000000;
+}
+
+.sample {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	padding: 10px;
+	text-align: center;
+}
+.sample audio {
+	margin: 10px;
+}
+.sample img {
+	height: auto;
+	width: 90%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.progression.sample {
+	background-color: rgba(204, 255, 221, 0.4);
+}
+
+.text.box {
+	display: inline-block;
+	padding: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	background-color: rgba(66, 189, 119, 0.5);
+	border-radius: 5px;
+	text-align: center;
+	margin: 5px;
+}
+.progression.text.box .progression.generated {
+	display: inline-block;
+	margin: 5px;
+	padding: 10px;
+	background-color: rgba(198, 235, 214, 0.9);
+	border-radius: 3px;
 }
