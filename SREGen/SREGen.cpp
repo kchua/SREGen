@@ -5,6 +5,8 @@
 #include "Note.h"
 #include "Scale.h"
 #include "Progression.h"
+#include "BassLine.h"
+#include "TwoPart.h"
 
 using namespace std;
 
@@ -15,7 +17,7 @@ void SREGen::generate(int argc, char * argv[]) {
 	} else if (mode == "progression") {
 		generateProgression(argc, argv);
 	} else if (mode == "bass") {
-		//generateBassLine(argc, argv);
+		generateBassLine(argc, argv);
 	} else if (mode == "twopartharm") {
 		//generateTwoPartHarmony(argc, argv);
 	} else {
@@ -101,6 +103,56 @@ void SREGen::generateProgression(int argc, char* argv[]) {
 	ofstream progressionFile;
 	progressionFile.open("progression.txt");
 	progressionFile << generated.outputRomanNumerals();
+	progressionFile.close();
+}
+
+void SREGen::generateBassLine(int argc, char* argv[]) {
+	int length = 0;
+	int startChordDegree = 0;
+	string endingCadence = "authentic";
+	string tonality = "major";
+	string tonic = "";
+	for (int i = 2; i < argc; i++) {
+		if (string(argv[i]) == "-t") {
+			tonality = argv[i + 1];
+		} else if (string(argv[i]) == "-l") {
+			length = atoi(argv[i + 1]);
+		} else if (string(argv[i]) == "-scd") {
+			startChordDegree = atoi(argv[i + 1]) - 1;
+		} else if (string(argv[i]) == "-ec") {
+			endingCadence = argv[i + 1];
+		} else if (string(argv[i]) == "-key") {
+			tonic = argv[i + 1];
+		}
+	}
+	if (length == 0 || tonic == "") {
+		cout << "Missing required length argument. Please include the -l flag, as well as any other optional arguments." << endl;
+		cout << "Example usage (Minor progression of length 10 starting with the tonic, and ending with a plagal cadence: SREGen progression -t minor -l 10 -scd 1 -ec plagal";
+		exit(-1);
+	}
+	if (endingCadence == "authentic") {
+		TwoPart::setEndingCadence({ generateChord(4, (tonality == "minor"), false), generateChord(0, (tonality == "minor"), false) });
+	}
+
+	BassLine generated = BassLine::generate(length, tonic, (tonality == "minor"));
+
+
+	ofstream output, progressionFile;
+	output.open("bassline.ly");
+	output << "{\n";
+	output << "\t\\time 4/4\n";
+	output << "\t\\clef bass\n";
+	output << "\t\\key " << tonic << " \\" << tonality << "\n";
+	output << "\t";
+
+	for (int i = 0; i < generated.length(); i++) {
+		output << generated.getScale()[generated[i]] << " ";
+	}
+	output << "\n}";
+	output.close();
+
+	progressionFile.open("bassline-progression.txt");
+	progressionFile << generated.getProgression().outputRomanNumerals();
 	progressionFile.close();
 }
 
